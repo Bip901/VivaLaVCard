@@ -2,8 +2,209 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:converters="using:Avalonia.Data.Converters"
+        xmlns:res="using:VivaLaVCard.Resources"
+        xmlns:vm="using:VivaLaVCard.ViewModels"
+        mc:Ignorable="d"
+        d:DesignWidth="1080"
+        d:DesignHeight="720"
         x:Class="VivaLaVCard.MainWindow"
-        Title="VivaLaVCard">
-    Hello World
+        x:DataType="vm:MainWindowViewModel"
+        d:DataContext="{x:Static vm:MainWindowViewModel.DesignInstance}"
+        Title="{x:Static res:Strings.app_title}"
+        Width="1080"
+        Height="720"
+        MinWidth="760"
+        MinHeight="320"
+        DragDrop.AllowDrop="True"
+        WindowStartupLocation="CenterScreen">
+    <Grid
+        Background="{DynamicResource SystemRegionBrush}"
+        ColumnDefinitions="320,1,*">
+        <!--  Contact list  -->
+        <DockPanel Background="{DynamicResource SidebarBackground}" Grid.Column="0">
+            <Border
+                Padding="20,20,20,10"
+                DockPanel.Dock="Top">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel
+                        Orientation="Horizontal"
+                        Spacing="4"
+                        VerticalAlignment="Center">
+                        <Button
+                            Classes="chip"
+                            Classes.active="{Binding IsContactsView}"
+                            Click="ContactsChip_Click"
+                            Content="{x:Static res:Strings.contacts_title}" />
+                        <Button
+                            Classes="chip"
+                            Classes.active="{Binding IsFilesView}"
+                            Click="FilesChip_Click"
+                            Content="{x:Static res:Strings.files_title}" />
+                    </StackPanel>
+                    <Button
+                        Grid.Column="1"
+                        AutomationProperties.Name="{x:Static res:Strings.open_files_tooltip}"
+                        Classes="round"
+                        Click="OpenContactsButton_Click"
+                        ToolTip.Tip="{x:Static res:Strings.open_files_tooltip}">
+                        <PathIcon Data="{StaticResource IconFileOpen}" />
+                    </Button>
+                </Grid>
+            </Border>
+            <Grid Margin="8,0,8,8">
+                <ListBox
+                    Background="Transparent"
+                    Classes="contacts"
+                    IsVisible="{Binding IsContactsView}"
+                    ItemsSource="{Binding Contacts}"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    SelectedItem="{Binding SelectedContact}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ContactViewModel">
+                            <Grid ColumnDefinitions="40,*" ColumnSpacing="12">
+                                <Border
+                                    Width="40"
+                                    Height="40"
+                                    Background="{DynamicResource AvatarBackground}"
+                                    ClipToBounds="True"
+                                    CornerRadius="20">
+                                    <PathIcon
+                                        Width="22"
+                                        Height="22"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Data="{StaticResource IconPerson}"
+                                        Foreground="{DynamicResource AvatarForeground}" />
+                                </Border>
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Text="{Binding DisplayName}"
+                                    TextTrimming="CharacterEllipsis"
+                                    VerticalAlignment="Center" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <ItemsControl
+                    Classes="scrollable virtualizing"
+                    IsVisible="{Binding IsFilesView}"
+                    ItemsSource="{Binding Files}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:VCardFileViewModel">
+                            <Border
+                                Margin="0,2"
+                                Padding="12,10"
+                                Background="{DynamicResource CardBackground}"
+                                CornerRadius="8">
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                    <StackPanel Spacing="2">
+                                        <TextBlock
+                                            Classes="h1"
+                                            Text="{Binding FileName}"
+                                            TextTrimming="CharacterEllipsis" />
+                                        <TextBlock
+                                            Classes="hint"
+                                            Text="{Binding FilePath}"
+                                            TextTrimming="CharacterEllipsis"
+                                            ToolTip.Tip="{Binding FilePath}" />
+                                    </StackPanel>
+                                    <Button
+                                        Grid.Column="1"
+                                        AutomationProperties.Name="{x:Static res:Strings.remove_file_tooltip}"
+                                        Classes="round"
+                                        Click="RemoveFileButton_Click"
+                                        ToolTip.Tip="{x:Static res:Strings.remove_file_tooltip}">
+                                        <PathIcon Data="{StaticResource IconClose}" />
+                                    </Button>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </DockPanel>
+
+        <Border Background="{DynamicResource PaneBorderBrush}" Grid.Column="1" />
+
+        <!--  Contact details  -->
+        <Grid Grid.Column="2">
+            <ContentControl Content="{Binding SelectedContact}">
+                <ContentControl.ContentTemplate>
+                    <DataTemplate x:DataType="vm:ContactViewModel">
+                        <StackPanel
+                            Margin="40"
+                            HorizontalAlignment="Center"
+                            MaxWidth="560"
+                            Spacing="20"
+                            VerticalAlignment="Center">
+                            <Panel
+                                Width="176"
+                                Height="176"
+                                HorizontalAlignment="Center">
+                                <Border
+                                    Background="{DynamicResource AvatarBackground}"
+                                    ClipToBounds="True"
+                                    CornerRadius="88"
+                                    IsVisible="{Binding Photo, Converter={x:Static converters:ObjectConverters.IsNull}}">
+                                    <PathIcon
+                                        Width="88"
+                                        Height="88"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Data="{StaticResource IconPerson}"
+                                        Foreground="{DynamicResource AvatarForeground}" />
+                                </Border>
+                                <Border
+                                    ClipToBounds="True"
+                                    CornerRadius="88"
+                                    IsVisible="{Binding Photo, Converter={x:Static converters:ObjectConverters.IsNotNull}}">
+                                    <Image Source="{Binding Photo}" Stretch="UniformToFill" />
+                                </Border>
+                            </Panel>
+                            <TextBlock
+                                Classes="display"
+                                Text="{Binding DisplayName}"
+                                TextAlignment="Center"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+
+            <!--  Empty state  -->
+            <StackPanel
+                Margin="40"
+                HorizontalAlignment="Center"
+                IsVisible="{Binding SelectedContact, Converter={x:Static converters:ObjectConverters.IsNull}}"
+                MaxWidth="360"
+                Spacing="12"
+                VerticalAlignment="Center">
+                <Border
+                    Width="96"
+                    Height="96"
+                    HorizontalAlignment="Center"
+                    Background="{DynamicResource AvatarBackground}"
+                    ClipToBounds="True"
+                    CornerRadius="48">
+                    <PathIcon
+                        Width="48"
+                        Height="48"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Data="{StaticResource IconPerson}"
+                        Foreground="{DynamicResource AvatarForeground}" />
+                </Border>
+                <TextBlock
+                    Classes="h1"
+                    Text="{x:Static res:Strings.no_contact_title}"
+                    TextAlignment="Center" />
+                <TextBlock
+                    Classes="hint"
+                    Text="{x:Static res:Strings.no_contact_hint}"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </Grid>
+    </Grid>
 </Window>

@@ -16,6 +16,12 @@
 							 Color="#ffeda3"/>
 			<SolidColorBrush x:Key="WarningForeground"
 							 Color="#181818"/>
+			<SolidColorBrush x:Key="AvatarBackground"
+							 Color="#33a955a4"/>
+			<SolidColorBrush x:Key="AvatarForeground"
+							 Color="#a955a4"/>
+			<SolidColorBrush x:Key="ChipHoverBackground"
+							 Color="#14a955a4"/>
 		</ResourceDictionary>
 		<ResourceDictionary x:Key="Dark">
 			<SolidColorBrush x:Key="CardBackground"
@@ -25,6 +31,12 @@
 							 Color="#e2ca52"/>
 			<SolidColorBrush x:Key="WarningForeground"
 							 Color="#000"/>
+			<SolidColorBrush x:Key="AvatarBackground"
+							 Color="#33900cb7"/>
+			<SolidColorBrush x:Key="AvatarForeground"
+							 Color="#d7a3e8"/>
+			<SolidColorBrush x:Key="ChipHoverBackground"
+							 Color="#22900cb7"/>
 		</ResourceDictionary>
 	</ResourceDictionary.ThemeDictionaries>
 	<SolidColorBrush x:Key="ButtonBackground"
@@ -32,4 +44,10 @@
 	<SolidColorBrush x:Key="ButtonBackgroundPointerOver"
 					 Color="{DynamicResource SystemBaseHighColor}"
 					 Opacity="0.2"/>
+	<SolidColorBrush x:Key="SidebarBackground"
+					 Color="{DynamicResource SystemChromeLowColor}"/>
+	<SolidColorBrush x:Key="PaneBorderBrush"
+					 Color="{DynamicResource SystemBaseLowColor}"/>
+	<SolidColorBrush x:Key="HintForeground"
+					 Color="{DynamicResource SystemBaseMediumColor}"/>
 </ResourceDictionary>

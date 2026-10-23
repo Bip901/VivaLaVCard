@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
@@ -19,16 +19,17 @@
     <PackageReference Include="Avalonia.Desktop" Version="12.0.3" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.3" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.3" />
-    <!--To compile resj files-->
+    <PackageReference Include="FolkerKinzel.VCards" Version="8.2.0" />
+    <!-- To compile resj files -->
     <PackageReference Include="Sylvan.BuildTools.Resources" Version="0.6.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
-	<ItemGroup>
-		<JsonResource Update="resources\Strings.resj">
-			<AccessModifier>Public</AccessModifier>
-		</JsonResource>
-	</ItemGroup>
+  <ItemGroup>
+    <JsonResource Update="resources\Strings.resj">
+      <AccessModifier>Public</AccessModifier>
+    </JsonResource>
+  </ItemGroup>
 </Project>

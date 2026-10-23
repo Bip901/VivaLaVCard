@@ -15,7 +15,12 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow();
+            MainWindow window = new();
+            if (desktop.Args != null)
+            {
+                window.ViewModel.AddFiles(desktop.Args);
+            }
+            desktop.MainWindow = window;
         }
 
         base.OnFrameworkInitializationCompleted();

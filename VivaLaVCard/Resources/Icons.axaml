@@ -3,11 +3,20 @@
 					xmlns:media="using:Avalonia.Media">
 	<Design.PreviewWith>
 		<ContentControl Padding="8">
-			<PathIcon Data="{StaticResource IconSearch}"/>
+			<PathIcon Data="{StaticResource IconPerson}"/>
 		</ContentControl>
 	</Design.PreviewWith>
 
 	<media:Geometry x:Key="IconSearch">
 		M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z
+	</media:Geometry>
+	<media:Geometry x:Key="IconPerson">
+		M12,12c2.21,0 4,-1.79 4,-4s-1.79,-4 -4,-4 -4,1.79 -4,4 1.79,4 4,4zM12,14c-2.67,0 -8,1.34 -8,4v2h16v-2c0,-2.66 -5.33,-4 -8,-4z
+	</media:Geometry>
+	<media:Geometry x:Key="IconFileOpen">
+		M240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v240h-80v-200H520v-200H240v640h360v80H240Zm638 15L760-183v89h-80v-226h226v80h-90l118 118-56 57Zm-638-95v-640 640Z
+	</media:Geometry>
+	<media:Geometry x:Key="IconClose">
+		m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z
 	</media:Geometry>
 </ResourceDictionary>

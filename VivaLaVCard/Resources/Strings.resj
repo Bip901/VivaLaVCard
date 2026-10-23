@@ -1,4 +1,14 @@
 {
   "Strings": {
+    "app_title": "Viva La VCard",
+    "contacts_title": "Contacts",
+    "files_title": "Files",
+    "no_contact_title": "No contact selected",
+    "no_contact_hint": "Select a contact from the list to see their details.",
+    "open_files_tooltip": "Open vCard files",
+    "open_files_title": "Open vCard Files",
+    "remove_file_tooltip": "Remove file from list",
+    "vcard_files_filter": "vCard files (*.vcf)",
+    "all_files_filter": "All files (*.*)"
   }
 }
