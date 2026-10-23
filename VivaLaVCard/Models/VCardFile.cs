@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using FolkerKinzel.VCards;
-using FolkerKinzel.VCards.Models.Properties;
 
 namespace VivaLaVCard.Models;
 
@@ -9,18 +10,26 @@ namespace VivaLaVCard.Models;
 /// </summary>
 public sealed class VCardFile
 {
-    public VCardFile(string filePath, IReadOnlyList<VCard> vCards)
+    public string FilePath { get; }
+
+    public VCard[] VCards { get; }
+
+    public VCardFile(string filePath, VCard[] vCards)
     {
         FilePath = filePath;
         VCards = vCards;
     }
 
-    public string FilePath { get; }
-
-    public IReadOnlyList<VCard> VCards { get; }
-
     public static VCardFile Load(string filePath)
     {
-        return new VCardFile(filePath, [new VCard() { DisplayNames = new TextProperty("Example") }]);
+        using Stream stream = File.OpenRead(filePath);
+        return Load(filePath, stream);
+    }
+
+    public static VCardFile Load(string filePath, Stream stream)
+    {
+        using StreamReader streamReader = new(stream);
+        VcfReader reader = new(streamReader);
+        return new VCardFile(filePath, reader.ReadToEnd().ToArray());
     }
 }
