@@ -64,6 +64,7 @@
             </Border>
             <Grid Margin="8,0,8,8">
                 <ListBox
+                    x:Name="ContactsList"
                     Background="Transparent"
                     Classes="contacts"
                     IsVisible="{Binding IsContactsView}"

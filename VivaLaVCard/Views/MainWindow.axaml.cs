@@ -7,6 +7,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using VivaLaVCard.Resources;
+using VivaLaVCard.Util;
 using VivaLaVCard.ViewModels;
 
 namespace VivaLaVCard.Views;
@@ -24,6 +25,7 @@ public partial class MainWindow : Window
         AddHandler(DragDrop.DragOverEvent, OnDragOver, handledEventsToo: true);
         AddHandler(DragDrop.DropEvent, OnDrop, handledEventsToo: true);
         AddHandler(KeyDownEvent, OnWindowKeyDown, RoutingStrategies.Tunnel);
+        SearchBox.AddHandler(KeyDownEvent, OnSearchBoxKeyDown, RoutingStrategies.Tunnel);
     }
 
     private static void OnDragOver(object? sender, DragEventArgs e)
@@ -51,6 +53,20 @@ public partial class MainWindow : Window
     private static bool HasFiles(DragEventArgs e)
     {
         return e.DataTransfer.TryGetFiles()?.OfType<IStorageFile>().Any() == true;
+    }
+
+    private void OnSearchBoxKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (
+            ViewModel.IsContactsView
+            && e.KeyModifiers == KeyModifiers.None
+            && (e.Key == Key.Down || e.Key == Key.Enter)
+        )
+        {
+            ContactsList.SelectedIndex = 0;
+            ContactsList.FocusFirstChildEventually();
+            e.Handled = true;
+        }
     }
 
     private void OnWindowKeyDown(object? sender, KeyEventArgs e)
