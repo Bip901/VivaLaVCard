@@ -6,11 +6,10 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
-using Avalonia.Threading;
 using VivaLaVCard.Resources;
 using VivaLaVCard.ViewModels;
 
-namespace VivaLaVCard;
+namespace VivaLaVCard.Views;
 
 public partial class MainWindow : Window
 {

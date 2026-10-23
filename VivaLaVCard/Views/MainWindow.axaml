@@ -2,13 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:converters="using:Avalonia.Data.Converters"
         xmlns:res="using:VivaLaVCard.Resources"
+        xmlns:views="using:VivaLaVCard.Views"
         xmlns:vm="using:VivaLaVCard.ViewModels"
         mc:Ignorable="d"
         d:DesignWidth="1080"
         d:DesignHeight="720"
-        x:Class="VivaLaVCard.MainWindow"
+        x:Class="VivaLaVCard.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Title="{x:Static res:Strings.app_title}"
         Width="1080"
@@ -150,83 +150,6 @@
             ResizeDirection="Columns" />
 
         <!--  Contact details  -->
-        <Grid Grid.Column="2">
-            <ContentControl Content="{Binding SelectedContact}">
-                <ContentControl.ContentTemplate>
-                    <DataTemplate x:DataType="vm:ContactViewModel">
-                        <StackPanel
-                            Margin="40"
-                            HorizontalAlignment="Center"
-                            MaxWidth="560"
-                            Spacing="20"
-                            VerticalAlignment="Center">
-                            <Panel
-                                Width="176"
-                                Height="176"
-                                HorizontalAlignment="Center">
-                                <Border
-                                    Background="{DynamicResource AvatarBackground}"
-                                    ClipToBounds="True"
-                                    CornerRadius="88"
-                                    IsVisible="{Binding Photo, Converter={x:Static converters:ObjectConverters.IsNull}}">
-                                    <PathIcon
-                                        Width="88"
-                                        Height="88"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Data="{StaticResource IconPerson}"
-                                        Foreground="{DynamicResource AvatarForeground}" />
-                                </Border>
-                                <Border
-                                    ClipToBounds="True"
-                                    CornerRadius="88"
-                                    IsVisible="{Binding Photo, Converter={x:Static converters:ObjectConverters.IsNotNull}}">
-                                    <Image Source="{Binding Photo}" Stretch="UniformToFill" />
-                                </Border>
-                            </Panel>
-                            <TextBlock
-                                Classes="display"
-                                Text="{Binding DisplayName}"
-                                TextAlignment="Center"
-                                TextWrapping="Wrap" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ContentControl.ContentTemplate>
-            </ContentControl>
-
-            <!--  Empty state  -->
-            <StackPanel
-                Margin="40"
-                HorizontalAlignment="Center"
-                IsVisible="{Binding SelectedContact, Converter={x:Static converters:ObjectConverters.IsNull}}"
-                MaxWidth="360"
-                Spacing="12"
-                VerticalAlignment="Center">
-                <Border
-                    Width="96"
-                    Height="96"
-                    HorizontalAlignment="Center"
-                    Background="{DynamicResource AvatarBackground}"
-                    ClipToBounds="True"
-                    CornerRadius="48">
-                    <PathIcon
-                        Width="48"
-                        Height="48"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Data="{StaticResource IconPerson}"
-                        Foreground="{DynamicResource AvatarForeground}" />
-                </Border>
-                <TextBlock
-                    Classes="h1"
-                    Text="{x:Static res:Strings.no_contact_title}"
-                    TextAlignment="Center" />
-                <TextBlock
-                    Classes="hint"
-                    Text="{x:Static res:Strings.no_contact_hint}"
-                    TextAlignment="Center"
-                    TextWrapping="Wrap" />
-            </StackPanel>
-        </Grid>
+        <views:ContactView Grid.Column="2" />
     </Grid>
 </Window>
