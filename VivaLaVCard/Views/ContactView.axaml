@@ -38,7 +38,7 @@
                                         <Image Source="{Binding Photo}" Stretch="UniformToFill" />
                                     </Border>
                                 </Panel>
-                                <TextBlock
+                                <SelectableTextBlock
                                     Grid.Column="1"
                                     Classes="display"
                                     Text="{Binding DisplayName}"

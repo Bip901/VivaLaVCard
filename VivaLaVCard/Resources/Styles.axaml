@@ -18,7 +18,7 @@
                     Classes="h2"
                     Text="Heading 2" />
                 <TextBlock Margin="0,8,0,0" Text="Body" />
-                <TextBlock Margin="0,8,0,0" Classes="display" Text="Display Title" />
+                <SelectableTextBlock Margin="0,8,0,0" Classes="display" Text="Display Title" />
                 <TextBlock Margin="0,8,0,0" Classes="hint" Text="Hint text" />
                 <TextBox Margin="0,8,0,0" PlaceholderText="Some textbox..." />
                 <Button Margin="0,8,0,0" Content="Regular Button" />
@@ -55,7 +55,7 @@
     <Style Selector="TextBlock.h2">
         <Setter Property="FontSize" Value="16" />
     </Style>
-    <Style Selector="TextBlock.display">
+    <Style Selector="SelectableTextBlock.display">
         <Setter Property="FontSize" Value="28" />
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
