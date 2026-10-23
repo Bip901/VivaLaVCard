@@ -82,8 +82,13 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     public void AddFiles(IEnumerable<string> filePaths)
     {
+        HashSet<string> existingPaths = [.. files.Select(file => file.FilePath)];
         foreach (string filePath in filePaths)
         {
+            if (existingPaths.Contains(filePath))
+            {
+                continue;
+            }
             files.Add(new VCardFileViewModel(VCardFile.Load(filePath)));
         }
         Refilter();
