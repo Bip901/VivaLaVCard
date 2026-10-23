@@ -122,6 +122,18 @@
         <Setter Property="BoxShadow" Value="{DynamicResource CardBoxShadows}" />
     </Style>
 
+    <!--  GridSplitter  -->
+    <Style Selector="GridSplitter.sidebar">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Cursor" Value="SizeWestEast" />
+    </Style>
+    <Style Selector="GridSplitter.sidebar:pointerover">
+        <Setter Property="Background" Value="{DynamicResource PaneBorderBrush}" />
+    </Style>
+    <Style Selector="GridSplitter.sidebar:pressed">
+        <Setter Property="Background" Value="{DynamicResource AvatarBackground}" />
+    </Style>
+
     <!--  ItemsControl and ListBox  -->
     <Style Selector="ItemsControl.scrollable">
         <Setter Property="Template">

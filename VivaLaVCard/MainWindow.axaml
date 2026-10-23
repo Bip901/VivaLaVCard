@@ -18,9 +18,12 @@
         MinHeight="320"
         DragDrop.AllowDrop="True"
         WindowStartupLocation="CenterScreen">
-    <Grid
-        Background="{DynamicResource SystemRegionBrush}"
-        ColumnDefinitions="320,1,*">
+    <Grid Background="{DynamicResource SystemRegionBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="200" Width="320" />
+            <ColumnDefinition Width="7" />
+            <ColumnDefinition MinWidth="360" Width="*" />
+        </Grid.ColumnDefinitions>
         <!--  Contact list  -->
         <DockPanel Background="{DynamicResource SidebarBackground}" Grid.Column="0">
             <Border
@@ -125,7 +128,20 @@
             </Grid>
         </DockPanel>
 
-        <Border Background="{DynamicResource PaneBorderBrush}" Grid.Column="1" />
+        <!--  Sidebar resizer  -->
+        <Border
+            Width="1"
+            HorizontalAlignment="Center"
+            Background="{DynamicResource PaneBorderBrush}"
+            Grid.Column="1"
+            IsHitTestVisible="False" />
+        <GridSplitter
+            AutomationProperties.Name="{x:Static res:Strings.resize_sidebar_tooltip}"
+            Background="Transparent"
+            Classes="sidebar"
+            Grid.Column="1"
+            ResizeBehavior="PreviousAndNext"
+            ResizeDirection="Columns" />
 
         <!--  Contact details  -->
         <Grid Grid.Column="2">
