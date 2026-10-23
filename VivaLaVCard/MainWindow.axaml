@@ -10,7 +10,6 @@
         d:DesignHeight="720"
         x:Class="VivaLaVCard.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        d:DataContext="{x:Static vm:MainWindowViewModel.DesignInstance}"
         Title="{x:Static res:Strings.app_title}"
         Width="1080"
         Height="720"
@@ -29,38 +28,44 @@
             <Border
                 Padding="20,20,20,10"
                 DockPanel.Dock="Top">
-                <Grid ColumnDefinitions="*,Auto">
-                    <StackPanel
-                        Orientation="Horizontal"
-                        Spacing="4"
-                        VerticalAlignment="Center">
+                <StackPanel Spacing="8">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel
+                            Orientation="Horizontal"
+                            Spacing="4"
+                            VerticalAlignment="Center">
+                            <Button
+                                Classes="chip"
+                                Classes.active="{Binding IsContactsView}"
+                                Click="ContactsChip_Click"
+                                Content="{x:Static res:Strings.contacts_title}" />
+                            <Button
+                                Classes="chip"
+                                Classes.active="{Binding IsFilesView}"
+                                Click="FilesChip_Click"
+                                Content="{x:Static res:Strings.files_title}" />
+                        </StackPanel>
                         <Button
-                            Classes="chip"
-                            Classes.active="{Binding IsContactsView}"
-                            Click="ContactsChip_Click"
-                            Content="{x:Static res:Strings.contacts_title}" />
-                        <Button
-                            Classes="chip"
-                            Classes.active="{Binding IsFilesView}"
-                            Click="FilesChip_Click"
-                            Content="{x:Static res:Strings.files_title}" />
-                    </StackPanel>
-                    <Button
-                        Grid.Column="1"
-                        AutomationProperties.Name="{x:Static res:Strings.open_files_tooltip}"
-                        Classes="round"
-                        Click="OpenContactsButton_Click"
-                        ToolTip.Tip="{x:Static res:Strings.open_files_tooltip}">
-                        <PathIcon Data="{StaticResource IconFileOpen}" />
-                    </Button>
-                </Grid>
+                            Grid.Column="1"
+                            AutomationProperties.Name="{x:Static res:Strings.open_files_tooltip}"
+                            Classes="round"
+                            Click="OpenContactsButton_Click"
+                            ToolTip.Tip="{x:Static res:Strings.open_files_tooltip}">
+                            <PathIcon Data="{StaticResource IconFileOpen}" />
+                        </Button>
+                    </Grid>
+                    <TextBox
+                        AutomationProperties.Name="{x:Static res:Strings.search_placeholder}"
+                        PlaceholderText="{x:Static res:Strings.search_placeholder}"
+                        Text="{Binding SearchQuery}" />
+                </StackPanel>
             </Border>
             <Grid Margin="8,0,8,8">
                 <ListBox
                     Background="Transparent"
                     Classes="contacts"
                     IsVisible="{Binding IsContactsView}"
-                    ItemsSource="{Binding Contacts}"
+                    ItemsSource="{Binding FilteredContacts}"
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                     SelectedItem="{Binding SelectedContact}">
                     <ListBox.ItemTemplate>
@@ -92,7 +97,7 @@
                 <ItemsControl
                     Classes="scrollable virtualizing"
                     IsVisible="{Binding IsFilesView}"
-                    ItemsSource="{Binding Files}">
+                    ItemsSource="{Binding FilteredFiles}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="vm:VCardFileViewModel">
                             <Border

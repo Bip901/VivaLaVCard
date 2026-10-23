@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,4 +24,9 @@ public sealed class VCardFileViewModel : ViewModelBase
     public string FileName => Path.GetFileName(FilePath);
 
     public IReadOnlyList<ContactViewModel> Contacts { get; }
+
+    public bool MatchesSearch(string query)
+    {
+        return FileName.Contains(query, StringComparison.CurrentCultureIgnoreCase);
+    }
 }
