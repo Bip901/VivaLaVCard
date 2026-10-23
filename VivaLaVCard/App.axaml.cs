@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using VivaLaVCard.Util;
 using VivaLaVCard.Views;
 
 namespace VivaLaVCard;
@@ -19,7 +20,10 @@ public partial class App : Application
             MainWindow window = new();
             if (desktop.Args != null)
             {
-                window.ViewModel.AddFiles(desktop.Args);
+                window.DoWhenLoaded(() =>
+                {
+                    _ = window.ViewModel.AddFilesAsync(desktop.Args);
+                });
             }
             desktop.MainWindow = window;
         }

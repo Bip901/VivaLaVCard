@@ -47,7 +47,7 @@ public partial class MainWindow : Window
         }
 
         e.DragEffects = DragDropEffects.Copy;
-        AddFiles(files);
+        _ = AddFilesAsync(files);
     }
 
     private static bool HasFiles(DragEventArgs e)
@@ -107,9 +107,9 @@ public partial class MainWindow : Window
         }
     }
 
-    private void AddFiles(IEnumerable<IStorageFile> files)
+    private async Task AddFilesAsync(IEnumerable<IStorageFile> files)
     {
-        ViewModel.AddFiles(files.Select(file => file.TryGetLocalPath() ?? file.Path.ToString()));
+        await ViewModel.AddFilesAsync(files.Select(file => file.TryGetLocalPath() ?? file.Path.ToString()));
     }
 
     private void ContactsChip_Click(object? sender, RoutedEventArgs e)
@@ -150,6 +150,6 @@ public partial class MainWindow : Window
             }
         );
 
-        AddFiles(files);
+        await AddFilesAsync(files);
     }
 }

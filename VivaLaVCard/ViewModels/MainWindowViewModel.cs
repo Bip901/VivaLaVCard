@@ -1,10 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
+using AvaloniaDialogs.Views;
 using FolkerKinzel.VCards;
 using FolkerKinzel.VCards.Models.Properties;
 using VivaLaVCard.Models;
 using VivaLaVCard.Resources;
+using VivaLaVCard.Util;
 
 namespace VivaLaVCard.ViewModels;
 
@@ -95,7 +99,7 @@ public sealed class MainWindowViewModel : ViewModelBase
 #endif
     }
 
-    public void AddFiles(IEnumerable<string> filePaths)
+    public async Task AddFilesAsync(IEnumerable<string> filePaths)
     {
         HashSet<string> existingPaths = [.. files.Select(file => file.FilePath)];
         foreach (string filePath in filePaths)
@@ -104,7 +108,20 @@ public sealed class MainWindowViewModel : ViewModelBase
             {
                 continue;
             }
-            files.Add(new VCardFileViewModel(VCardFile.Load(filePath)));
+            try
+            {
+                files.Add(new VCardFileViewModel(VCardFile.Load(filePath)));
+            }
+            catch (Exception ex)
+            {
+                SingleActionDialog dialog = new()
+                {
+                    Message = string.Format(Strings.invalid_file_desc, filePath, ex.Message),
+                    ButtonText = Strings.ok,
+                };
+                await dialog.ShowAsync();
+                await Task.Delay(100);
+            }
         }
         Refilter();
     }

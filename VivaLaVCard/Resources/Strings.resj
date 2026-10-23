@@ -1,6 +1,7 @@
 {
   "Strings": {
     "app_title": "Viva La VCard",
+    "ok": "OK",
     "contacts_title": "Contacts",
     "files_title": "Files",
     "search_placeholder": "Search (/)",
@@ -10,6 +11,7 @@
     "no_contact_hint": "Select a contact from the list to see their details.",
     "open_files_tooltip": "Open vCard files (Ctrl+O)",
     "open_files_title": "Open vCard Files",
+    "invalid_file_desc": "Failed loading vCard file {0}. Reason: {1}",
     "remove_file_tooltip": "Remove file from list",
     "resize_sidebar_tooltip": "Resize sidebar",
     "vcard_files_filter": "vCard files (*.vcf)",

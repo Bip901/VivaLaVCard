@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:res="using:VivaLaVCard.Resources"
         xmlns:views="using:VivaLaVCard.Views"
+        xmlns:dialogs="using:AvaloniaDialogs.Views"
         xmlns:vm="using:VivaLaVCard.ViewModels"
         mc:Ignorable="d"
         d:DesignWidth="1080"
@@ -17,141 +18,143 @@
         MinHeight="320"
         DragDrop.AllowDrop="True"
         WindowStartupLocation="CenterScreen">
-    <Grid Background="{DynamicResource SystemRegionBrush}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="240" Width="320" />
-            <ColumnDefinition Width="7" />
-            <ColumnDefinition MinWidth="360" Width="*" />
-        </Grid.ColumnDefinitions>
-        <!--  Contact list  -->
-        <DockPanel Background="{DynamicResource SidebarBackground}" Grid.Column="0">
-            <Border
-                Padding="8"
-                DockPanel.Dock="Top">
-                <StackPanel Spacing="8">
-                    <Grid ColumnDefinitions="*,Auto">
-                        <StackPanel
-                            Orientation="Horizontal"
-                            Spacing="4"
-                            VerticalAlignment="Center">
+    <dialogs:ReactiveDialogHost CloseOnClickAway="True">
+        <Grid Background="{DynamicResource SystemRegionBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="240" Width="320" />
+                <ColumnDefinition Width="7" />
+                <ColumnDefinition MinWidth="360" Width="*" />
+            </Grid.ColumnDefinitions>
+            <!--  Contact list  -->
+            <DockPanel Background="{DynamicResource SidebarBackground}" Grid.Column="0">
+                <Border
+                    Padding="8"
+                    DockPanel.Dock="Top">
+                    <StackPanel Spacing="8">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel
+                                Orientation="Horizontal"
+                                Spacing="4"
+                                VerticalAlignment="Center">
+                                <Button
+                                    Classes="chip"
+                                    Classes.active="{Binding IsContactsView}"
+                                    Click="ContactsChip_Click"
+                                    Content="{x:Static res:Strings.contacts_title}" />
+                                <Button
+                                    Classes="chip"
+                                    Classes.active="{Binding IsFilesView}"
+                                    Click="FilesChip_Click"
+                                    Content="{x:Static res:Strings.files_title}" />
+                            </StackPanel>
                             <Button
-                                Classes="chip"
-                                Classes.active="{Binding IsContactsView}"
-                                Click="ContactsChip_Click"
-                                Content="{x:Static res:Strings.contacts_title}" />
-                            <Button
-                                Classes="chip"
-                                Classes.active="{Binding IsFilesView}"
-                                Click="FilesChip_Click"
-                                Content="{x:Static res:Strings.files_title}" />
-                        </StackPanel>
-                        <Button
-                            Grid.Column="1"
-                            AutomationProperties.Name="{x:Static res:Strings.open_files_tooltip}"
-                            Classes="round"
-                            Click="OpenContactsButton_Click"
-                            ToolTip.Tip="{x:Static res:Strings.open_files_tooltip}">
-                            <PathIcon Data="{StaticResource IconFileOpen}" />
-                        </Button>
-                    </Grid>
-                    <TextBox
-                        x:Name="SearchBox"
-                        AutomationProperties.Name="{x:Static res:Strings.search_placeholder}"
-                        PlaceholderText="{x:Static res:Strings.search_placeholder}"
-                        Text="{Binding SearchQuery}" />
-                    <TextBlock Classes="hint" Text="{Binding ContactCountLabel}" />
-                </StackPanel>
-            </Border>
-            <Grid Margin="8,0,8,8">
-                <ListBox
-                    x:Name="ContactsList"
-                    Background="Transparent"
-                    Classes="contacts"
-                    IsVisible="{Binding IsContactsView}"
-                    ItemsSource="{Binding FilteredContacts}"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                    SelectedItem="{Binding SelectedContact}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate x:DataType="vm:ContactViewModel">
-                            <Grid ColumnDefinitions="40,*" ColumnSpacing="12">
-                                <Border
-                                    Width="40"
-                                    Height="40"
-                                    Background="{DynamicResource AvatarBackground}"
-                                    ClipToBounds="True"
-                                    CornerRadius="20">
-                                    <PathIcon
-                                        Width="22"
-                                        Height="22"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Data="{StaticResource IconPerson}"
-                                        Foreground="{DynamicResource AvatarForeground}" />
-                                </Border>
-                                <TextBlock
-                                    Grid.Column="1"
-                                    Text="{Binding DisplayName}"
-                                    TextTrimming="CharacterEllipsis"
-                                    VerticalAlignment="Center" />
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-                <ItemsControl
-                    Classes="scrollable virtualizing"
-                    IsVisible="{Binding IsFilesView}"
-                    ItemsSource="{Binding FilteredFiles}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate x:DataType="vm:VCardFileViewModel">
-                            <Border
-                                Margin="0,2"
-                                Padding="12,10"
-                                Background="{DynamicResource CardBackground}"
-                                CornerRadius="8">
-                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                                    <StackPanel Spacing="2">
-                                        <TextBlock
-                                            Classes="h1"
-                                            Text="{Binding FileName}"
-                                            TextTrimming="CharacterEllipsis" />
-                                        <TextBlock
-                                            Classes="hint"
-                                            Text="{Binding FilePath}"
-                                            TextTrimming="CharacterEllipsis"
-                                            ToolTip.Tip="{Binding FilePath}" />
-                                    </StackPanel>
-                                    <Button
+                                Grid.Column="1"
+                                AutomationProperties.Name="{x:Static res:Strings.open_files_tooltip}"
+                                Classes="round"
+                                Click="OpenContactsButton_Click"
+                                ToolTip.Tip="{x:Static res:Strings.open_files_tooltip}">
+                                <PathIcon Data="{StaticResource IconFileOpen}" />
+                            </Button>
+                        </Grid>
+                        <TextBox
+                            x:Name="SearchBox"
+                            AutomationProperties.Name="{x:Static res:Strings.search_placeholder}"
+                            PlaceholderText="{x:Static res:Strings.search_placeholder}"
+                            Text="{Binding SearchQuery}" />
+                        <TextBlock Classes="hint" Text="{Binding ContactCountLabel}" />
+                    </StackPanel>
+                </Border>
+                <Grid Margin="8,0,8,8">
+                    <ListBox
+                        x:Name="ContactsList"
+                        Background="Transparent"
+                        Classes="contacts"
+                        IsVisible="{Binding IsContactsView}"
+                        ItemsSource="{Binding FilteredContacts}"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        SelectedItem="{Binding SelectedContact}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ContactViewModel">
+                                <Grid ColumnDefinitions="40,*" ColumnSpacing="12">
+                                    <Border
+                                        Width="40"
+                                        Height="40"
+                                        Background="{DynamicResource AvatarBackground}"
+                                        ClipToBounds="True"
+                                        CornerRadius="20">
+                                        <PathIcon
+                                            Width="22"
+                                            Height="22"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Data="{StaticResource IconPerson}"
+                                            Foreground="{DynamicResource AvatarForeground}" />
+                                    </Border>
+                                    <TextBlock
                                         Grid.Column="1"
-                                        AutomationProperties.Name="{x:Static res:Strings.remove_file_tooltip}"
-                                        Classes="round"
-                                        Click="RemoveFileButton_Click"
-                                        ToolTip.Tip="{x:Static res:Strings.remove_file_tooltip}">
-                                        <PathIcon Data="{StaticResource IconClose}" />
-                                    </Button>
+                                        Text="{Binding DisplayName}"
+                                        TextTrimming="CharacterEllipsis"
+                                        VerticalAlignment="Center" />
                                 </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Grid>
-        </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <ItemsControl
+                        Classes="scrollable virtualizing"
+                        IsVisible="{Binding IsFilesView}"
+                        ItemsSource="{Binding FilteredFiles}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:VCardFileViewModel">
+                                <Border
+                                    Margin="0,2"
+                                    Padding="12,10"
+                                    Background="{DynamicResource CardBackground}"
+                                    CornerRadius="8">
+                                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                        <StackPanel Spacing="2">
+                                            <TextBlock
+                                                Classes="h1"
+                                                Text="{Binding FileName}"
+                                                TextTrimming="CharacterEllipsis" />
+                                            <TextBlock
+                                                Classes="hint"
+                                                Text="{Binding FilePath}"
+                                                TextTrimming="CharacterEllipsis"
+                                                ToolTip.Tip="{Binding FilePath}" />
+                                        </StackPanel>
+                                        <Button
+                                            Grid.Column="1"
+                                            AutomationProperties.Name="{x:Static res:Strings.remove_file_tooltip}"
+                                            Classes="round"
+                                            Click="RemoveFileButton_Click"
+                                            ToolTip.Tip="{x:Static res:Strings.remove_file_tooltip}">
+                                            <PathIcon Data="{StaticResource IconClose}" />
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </DockPanel>
 
-        <!--  Sidebar resizer  -->
-        <Border
-            Width="1"
-            HorizontalAlignment="Center"
-            Background="{DynamicResource PaneBorderBrush}"
-            Grid.Column="1"
-            IsHitTestVisible="False" />
-        <GridSplitter
-            AutomationProperties.Name="{x:Static res:Strings.resize_sidebar_tooltip}"
-            Background="Transparent"
-            Classes="sidebar"
-            Grid.Column="1"
-            ResizeBehavior="PreviousAndNext"
-            ResizeDirection="Columns" />
+            <!--  Sidebar resizer  -->
+            <Border
+                Width="1"
+                HorizontalAlignment="Center"
+                Background="{DynamicResource PaneBorderBrush}"
+                Grid.Column="1"
+                IsHitTestVisible="False" />
+            <GridSplitter
+                AutomationProperties.Name="{x:Static res:Strings.resize_sidebar_tooltip}"
+                Background="Transparent"
+                Classes="sidebar"
+                Grid.Column="1"
+                ResizeBehavior="PreviousAndNext"
+                ResizeDirection="Columns" />
 
-        <!--  Contact details  -->
-        <views:ContactView Grid.Column="2" />
-    </Grid>
+            <!--  Contact details  -->
+            <views:ContactView Grid.Column="2" />
+        </Grid>
+    </dialogs:ReactiveDialogHost>
 </Window>
