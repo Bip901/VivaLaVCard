@@ -1,20 +1,47 @@
 {
   "Strings": {
+    // Main Window
     "app_title": "Viva La VCard",
     "ok": "OK",
+    "copy_tooltip": "Copy",
     "contacts_title": "Contacts",
     "files_title": "Files",
     "search_placeholder": "Search (/)",
     "contacts_count": "{0} contacts",
+    "files_count": "{0} files",
     "contacts_search_count": "{0}/{1} contacts",
-    "no_contact_title": "No contact selected",
-    "no_contact_hint": "Select a contact from the list to see their details.",
     "open_files_tooltip": "Open vCard files (Ctrl+O)",
     "open_files_title": "Open vCard Files",
     "invalid_file_desc": "Failed loading vCard file {0}. Reason: {1}",
     "remove_file_tooltip": "Remove file from list",
     "resize_sidebar_tooltip": "Resize sidebar",
     "vcard_files_filter": "vCard files (*.vcf)",
-    "all_files_filter": "All files (*.*)"
+    "all_files_filter": "All files (*.*)",
+
+    // Contact View
+    "no_contact_title": "No contact selected",
+    "no_contact_hint": "Select a contact from the list to see their details.",
+    "name_title": "Name",
+    "name_prefix": "Name prefix",
+    "name_first": "First name",
+    "name_middle": "Middle name",
+    "name_last": "Last name",
+    "name_suffix": "Name suffix",
+    "name_phonetic_first": "Phonetic first name",
+    "name_phonetic_middle": "Phonetic middle name",
+    "name_phonetic_last": "Phonetic last name",
+    "nickname": "Nickname",
+    "contact_title": "Contact",
+    "phone": "Phone",
+    "email": "Email",
+    "job_title": "Job title",
+    "department": "Department",
+    "company": "Company",
+    "addresses_title": "Addresses",
+    "birthday_title": "Birthday",
+    "relationships_title": "Relationships",
+    "notes_title": "Notes",
+    "websites_title": "Websites",
+    "custom_fields_title": "Custom fields"
   }
 }

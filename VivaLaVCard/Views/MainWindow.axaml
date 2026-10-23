@@ -22,7 +22,7 @@
         <Grid Background="{DynamicResource SystemRegionBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="240" Width="320" />
-                <ColumnDefinition Width="7" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition MinWidth="360" Width="*" />
             </Grid.ColumnDefinitions>
             <!--  Contact list  -->
@@ -113,7 +113,7 @@
                                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
                                         <StackPanel Spacing="2">
                                             <TextBlock
-                                                Classes="h1"
+                                                Classes="h2"
                                                 Text="{Binding FileName}"
                                                 TextTrimming="CharacterEllipsis" />
                                             <TextBlock

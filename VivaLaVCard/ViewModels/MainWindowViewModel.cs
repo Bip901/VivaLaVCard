@@ -8,7 +8,6 @@ using FolkerKinzel.VCards;
 using FolkerKinzel.VCards.Models.Properties;
 using VivaLaVCard.Models;
 using VivaLaVCard.Resources;
-using VivaLaVCard.Util;
 
 namespace VivaLaVCard.ViewModels;
 
@@ -49,6 +48,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             OnPropertyChanged();
             OnPropertyChanged(nameof(IsContactsView));
             OnPropertyChanged(nameof(IsFilesView));
+            OnPropertyChanged(nameof(ContactCountLabel));
         }
     }
     private SidebarView selectedSidebarView = SidebarView.Contacts;
@@ -61,6 +61,10 @@ public sealed class MainWindowViewModel : ViewModelBase
     {
         get
         {
+            if (IsFilesView)
+            {
+                return string.Format(Strings.files_count, FilteredFiles.Count);
+            }
             return string.IsNullOrWhiteSpace(searchQuery)
                 ? string.Format(Strings.contacts_count, FilteredContacts.Count)
                 : string.Format(

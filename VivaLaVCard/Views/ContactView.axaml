@@ -9,49 +9,102 @@
         <ContentControl Content="{Binding SelectedContact}">
             <ContentControl.ContentTemplate>
                 <DataTemplate x:DataType="vm:ContactViewModel">
-                    <StackPanel
-                        Margin="40"
-                        HorizontalAlignment="Center"
-                        MaxWidth="560"
-                        Spacing="20"
-                        VerticalAlignment="Center">
-                        <Panel
-                            Width="176"
-                            Height="176"
-                            HorizontalAlignment="Center">
-                            <Border
-                                Background="{DynamicResource AvatarBackground}"
-                                ClipToBounds="True"
-                                CornerRadius="88"
-                                IsVisible="{Binding Photo, Converter={x:Static converters:ObjectConverters.IsNull}}">
-                                <PathIcon
-                                    Width="88"
-                                    Height="88"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Data="{StaticResource IconPerson}"
-                                    Foreground="{DynamicResource AvatarForeground}" />
-                            </Border>
-                            <Border
-                                ClipToBounds="True"
-                                CornerRadius="88"
-                                IsVisible="{Binding Photo, Converter={x:Static converters:ObjectConverters.IsNotNull}}">
-                                <Image Source="{Binding Photo}" Stretch="UniformToFill" />
-                            </Border>
-                        </Panel>
-                        <TextBlock
-                            Classes="display"
-                            Text="{Binding DisplayName}"
-                            TextAlignment="Center"
-                            TextWrapping="Wrap" />
-                    </StackPanel>
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel
+                            Margin="32"
+                            Spacing="24">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="20">
+                                <Panel
+                                    Width="96"
+                                    Height="96"
+                                    VerticalAlignment="Center">
+                                    <Border
+                                        Background="{DynamicResource AvatarBackground}"
+                                        ClipToBounds="True"
+                                        CornerRadius="48"
+                                        IsVisible="{Binding Photo, Converter={x:Static converters:ObjectConverters.IsNull}}">
+                                        <PathIcon
+                                            Width="48"
+                                            Height="48"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Data="{StaticResource IconPerson}"
+                                            Foreground="{DynamicResource AvatarForeground}" />
+                                    </Border>
+                                    <Border
+                                        ClipToBounds="True"
+                                        CornerRadius="48"
+                                        IsVisible="{Binding Photo, Converter={x:Static converters:ObjectConverters.IsNotNull}}">
+                                        <Image Source="{Binding Photo}" Stretch="UniformToFill" />
+                                    </Border>
+                                </Panel>
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Classes="display"
+                                    Text="{Binding DisplayName}"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center" />
+                            </Grid>
+
+                            <ItemsControl ItemsSource="{Binding Sections}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Spacing="24" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:ContactSectionViewModel">
+                                        <StackPanel Spacing="8">
+                                            <TextBlock Classes="h1" Text="{Binding Title}" />
+                                            <ItemsControl ItemsSource="{Binding Fields}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Spacing="6" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate x:DataType="vm:ContactFieldViewModel">
+                                                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                                            <TextBlock
+                                                                MinWidth="110"
+                                                                MaxWidth="160"
+                                                                VerticalAlignment="Center"
+                                                                Classes="hint"
+                                                                IsVisible="{Binding Label, Converter={x:Static converters:StringConverters.IsNotNullOrEmpty}}"
+                                                                Text="{Binding Label}"
+                                                                TextWrapping="Wrap" />
+                                                            <SelectableTextBlock
+                                                                VerticalAlignment="Center"
+                                                                Grid.Column="1"
+                                                                Text="{Binding Value}"
+                                                                TextWrapping="Wrap" />
+                                                            <Button
+                                                                Grid.Column="2"
+                                                                x:Name="ButtonCopy"
+                                                                ToolTip.Tip="{x:Static res:Strings.copy_tooltip}"
+                                                                IsVisible="True"
+                                                                VerticalAlignment="Center"
+                                                                Classes="round"
+                                                                Click="CopyButton_Click">
+                                                                <PathIcon Data="{StaticResource IconCopy}" />
+                                                            </Button>
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ScrollViewer>
                 </DataTemplate>
             </ContentControl.ContentTemplate>
         </ContentControl>
 
         <!--  Empty state  -->
         <StackPanel
-            Margin="40"
+            Margin="32"
             HorizontalAlignment="Center"
             IsVisible="{Binding SelectedContact, Converter={x:Static converters:ObjectConverters.IsNull}}"
             MaxWidth="360"
