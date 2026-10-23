@@ -20,7 +20,7 @@
         WindowStartupLocation="CenterScreen">
     <Grid Background="{DynamicResource SystemRegionBrush}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="200" Width="320" />
+            <ColumnDefinition MinWidth="240" Width="320" />
             <ColumnDefinition Width="7" />
             <ColumnDefinition MinWidth="360" Width="*" />
         </Grid.ColumnDefinitions>
