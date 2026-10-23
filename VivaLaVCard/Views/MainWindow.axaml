@@ -59,6 +59,7 @@
                         AutomationProperties.Name="{x:Static res:Strings.search_placeholder}"
                         PlaceholderText="{x:Static res:Strings.search_placeholder}"
                         Text="{Binding SearchQuery}" />
+                    <TextBlock Classes="hint" Text="{Binding ContactCountLabel}" />
                 </StackPanel>
             </Border>
             <Grid Margin="8,0,8,8">

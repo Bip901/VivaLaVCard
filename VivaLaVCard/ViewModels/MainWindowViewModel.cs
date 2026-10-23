@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using FolkerKinzel.VCards;
 using FolkerKinzel.VCards.Models.Properties;
 using VivaLaVCard.Models;
+using VivaLaVCard.Resources;
 
 namespace VivaLaVCard.ViewModels;
 
@@ -51,6 +52,20 @@ public sealed class MainWindowViewModel : ViewModelBase
     public bool IsContactsView => SelectedSidebarView == SidebarView.Contacts;
 
     public bool IsFilesView => SelectedSidebarView == SidebarView.Files;
+
+    public string ContactCountLabel
+    {
+        get
+        {
+            return string.IsNullOrWhiteSpace(searchQuery)
+                ? string.Format(Strings.contacts_count, FilteredContacts.Count)
+                : string.Format(
+                    Strings.contacts_search_count,
+                    FilteredContacts.Count,
+                    files.Sum(file => file.Contacts.Count)
+                );
+        }
+    }
 
     public ContactViewModel? SelectedContact
     {
@@ -115,5 +130,6 @@ public sealed class MainWindowViewModel : ViewModelBase
         FilteredContacts = filteredContactEnumerable.ToArray();
         OnPropertyChanged(nameof(FilteredFiles));
         OnPropertyChanged(nameof(FilteredContacts));
+        OnPropertyChanged(nameof(ContactCountLabel));
     }
 }

@@ -4,6 +4,8 @@
     "contacts_title": "Contacts",
     "files_title": "Files",
     "search_placeholder": "Search (/)",
+    "contacts_count": "{0} contacts",
+    "contacts_search_count": "{0}/{1} contacts",
     "no_contact_title": "No contact selected",
     "no_contact_hint": "Select a contact from the list to see their details.",
     "open_files_tooltip": "Open vCard files (Ctrl+O)",
