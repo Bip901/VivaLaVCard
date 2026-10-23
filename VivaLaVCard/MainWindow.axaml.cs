@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using VivaLaVCard.Resources;
 using VivaLaVCard.ViewModels;
 
@@ -21,6 +24,7 @@ public partial class MainWindow : Window
         AddHandler(DragDrop.DragEnterEvent, OnDragOver, handledEventsToo: true);
         AddHandler(DragDrop.DragOverEvent, OnDragOver, handledEventsToo: true);
         AddHandler(DragDrop.DropEvent, OnDrop, handledEventsToo: true);
+        AddHandler(KeyDownEvent, OnWindowKeyDown, RoutingStrategies.Tunnel);
     }
 
     private static void OnDragOver(object? sender, DragEventArgs e)
@@ -50,6 +54,44 @@ public partial class MainWindow : Window
         return e.DataTransfer.TryGetFiles()?.OfType<IStorageFile>().Any() == true;
     }
 
+    private void OnWindowKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.KeyModifiers == KeyModifiers.Control)
+        {
+            if (e.Key == Key.O)
+            {
+                _ = OpenFilesAsync();
+                e.Handled = true;
+                return;
+            }
+            int offset = e.Key switch
+            {
+                Key.PageDown => 1,
+                Key.PageUp => -1,
+                _ => 0,
+            };
+            if (offset == 0)
+            {
+                return;
+            }
+            SidebarView[] views = Enum.GetValues<SidebarView>();
+            int currentIndex = Array.IndexOf(views, ViewModel.SelectedSidebarView);
+            ViewModel.SelectedSidebarView = views[(currentIndex + offset + views.Length) % views.Length];
+            e.Handled = true;
+            return;
+        }
+        if (e.KeyModifiers == KeyModifiers.None && (e.Key == Key.OemQuestion || e.Key == Key.Divide))
+        {
+            if (!SearchBox.IsFocused)
+            {
+                SearchBox.Focus();
+                SearchBox.SelectAll();
+                e.Handled = true;
+                return;
+            }
+        }
+    }
+
     private void AddFiles(IEnumerable<IStorageFile> files)
     {
         ViewModel.AddFiles(files.Select(file => file.TryGetLocalPath() ?? file.Path.ToString()));
@@ -75,6 +117,11 @@ public partial class MainWindow : Window
 
     private async void OpenContactsButton_Click(object? sender, RoutedEventArgs e)
     {
+        await OpenFilesAsync();
+    }
+
+    private async Task OpenFilesAsync()
+    {
         var files = await StorageProvider.OpenFilePickerAsync(
             new FilePickerOpenOptions
             {
@@ -87,11 +134,6 @@ public partial class MainWindow : Window
                 ],
             }
         );
-
-        if (files.Count == 0)
-        {
-            return;
-        }
 
         AddFiles(files);
     }

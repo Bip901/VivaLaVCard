@@ -55,6 +55,7 @@
                         </Button>
                     </Grid>
                     <TextBox
+                        x:Name="SearchBox"
                         AutomationProperties.Name="{x:Static res:Strings.search_placeholder}"
                         PlaceholderText="{x:Static res:Strings.search_placeholder}"
                         Text="{Binding SearchQuery}" />
