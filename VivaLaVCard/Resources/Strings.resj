@@ -21,7 +21,8 @@
     // Contact View
     "no_contact_title": "No contact selected",
     "no_contact_hint": "Select a contact from the list to see their details.",
-    "name_title": "Name",
+
+    "section_title_name": "Name",
     "name_prefix": "Name prefix",
     "name_first": "First name",
     "name_middle": "Middle name",
@@ -31,17 +32,19 @@
     "name_phonetic_middle": "Phonetic middle name",
     "name_phonetic_last": "Phonetic last name",
     "nickname": "Nickname",
-    "contact_title": "Contact",
+    "section_title_contact": "Contact", // Contact as a verb
     "phone": "Phone",
     "email": "Email",
+    "section_title_work": "Job title",
     "job_title": "Job title",
     "department": "Department",
     "company": "Company",
-    "addresses_title": "Addresses",
-    "birthday_title": "Birthday",
-    "relationships_title": "Relationships",
-    "notes_title": "Notes",
-    "websites_title": "Websites",
-    "custom_fields_title": "Custom fields"
+    "section_title_addresses": "Addresses",
+    "section_title_important_dates": "Important Dates",
+    "birthday": "Birthday",
+    "section_title_relationships": "Relationships",
+    "notes": "Notes",
+    "websites": "Websites",
+    "section_title_custom_fields": "Custom fields"
   }
 }

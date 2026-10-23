@@ -105,6 +105,7 @@ public sealed class ContactViewModel : ViewModelBase
                 }
             }
             AddNameSection();
+            AddCustomFieldsSection();
             return new ContactViewModel(displayName, photo, sections, vCard);
         }
 
@@ -148,7 +149,19 @@ public sealed class ContactViewModel : ViewModelBase
                     AddField(Strings.nickname, nickName);
                 }
             }
-            FlushSection(Strings.name_title);
+            FlushSection(Strings.section_title_name);
+        }
+
+        private void AddCustomFieldsSection()
+        {
+            foreach (KeyValuePair<string, List<string>> pair in nonStandards)
+            {
+                foreach (string value in pair.Value)
+                {
+                    AddField(pair.Key, value);
+                }
+            }
+            FlushSection(Strings.section_title_custom_fields);
         }
 
         private string? ConsumeNonStandardValue(string key)
