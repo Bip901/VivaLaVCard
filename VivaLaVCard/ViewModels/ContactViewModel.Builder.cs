@@ -277,6 +277,31 @@ partial class ContactViewModel
 
         private void AddExtraInformationSection()
         {
+            if (vCard.Notes != null)
+            {
+                foreach (TextProperty? note in vCard.Notes)
+                {
+                    AddTextField(Strings.note, note?.Value);
+                }
+            }
+            if (vCard.Urls != null)
+            {
+                foreach (TextProperty? url in vCard.Urls)
+                {
+                    if (url is null)
+                    {
+                        continue;
+                    }
+                    fields.Add(new ContactUrlFieldViewModel(Strings.website, url.Value));
+                }
+            }
+            foreach (KeyValuePair<string, List<string>> pair in nonStandards)
+            {
+                foreach (string value in pair.Value)
+                {
+                    AddTextField(pair.Key, value);
+                }
+            }
             AddTextField(
                 Strings.vcard_version,
                 vCard.Version switch
@@ -287,13 +312,6 @@ partial class ContactViewModel
                     _ => vCard.Version.ToString(),
                 }
             );
-            foreach (KeyValuePair<string, List<string>> pair in nonStandards)
-            {
-                foreach (string value in pair.Value)
-                {
-                    AddTextField(pair.Key, value);
-                }
-            }
             FlushSection(Strings.section_title_extra_information);
         }
 

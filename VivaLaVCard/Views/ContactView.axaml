@@ -73,6 +73,7 @@
                                                     <StaticResourceExtension ResourceKey="ContactAddressField"/>
                                                     <StaticResourceExtension ResourceKey="ContactEmailField"/>
                                                     <StaticResourceExtension ResourceKey="ContactPhoneField"/>
+                                                    <StaticResourceExtension ResourceKey="ContactUrlField"/>
                                                     <StaticResourceExtension ResourceKey="ContactTextField"/>
                                                 </ItemsControl.DataTemplates>
                                             </ItemsControl>

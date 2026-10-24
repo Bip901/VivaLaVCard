@@ -55,9 +55,10 @@
     "section_title_important_dates": "Important Dates",
     "birthday": "Birthday",
     "section_title_relationships": "Relationships",
-    "notes": "Notes",
-    "websites": "Websites",
     "section_title_extra_information": "Extra information",
+    "note": "Note",
+    "website": "Website",
+    "open_website_tooltip": "Open website",
     "vcard_version": "vCard Version"
   }
 }
