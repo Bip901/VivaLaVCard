@@ -1,6 +1,8 @@
+using System.Globalization;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using VivaLaVCard.Util;
 using VivaLaVCard.Views;
 
@@ -8,6 +10,9 @@ namespace VivaLaVCard;
 
 public partial class App : Application
 {
+    public static FlowDirection FlowDir =>
+        CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);

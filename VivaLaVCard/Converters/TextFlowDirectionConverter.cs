@@ -10,6 +10,15 @@ public class TextFlowDirectionConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
+        if (targetType == typeof(FlowDirection))
+        {
+            return Convert(value, parameter);
+        }
+        return App.FlowDir == FlowDirection.RightToLeft ? TextAlignment.Right : TextAlignment.Left;
+    }
+
+    private static FlowDirection Convert(object? value, object? parameter)
+    {
         if (value is string text && new CodepointEnumerator(text).MoveNext(out Codepoint firstCodepoint))
         {
             switch (firstCodepoint.BiDiClass)

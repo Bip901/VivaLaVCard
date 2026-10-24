@@ -1,6 +1,7 @@
 ﻿<Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:app="using:VivaLaVCard"
     xmlns:converters="using:VivaLaVCard.Converters">
     <Design.PreviewWith>
         <Border Padding="20">
@@ -44,9 +45,21 @@
         </FluentTheme.Palettes>
     </FluentTheme>
 
+    <!--  Window  -->
+    <Style Selector="Window">
+        <Setter Property="FlowDirection" Value="{x:Static app:App.FlowDir}"/>
+    </Style>
+
     <!--  TextBlock  -->
     <Style Selector="TextBlock">
         <Setter Property="FontSize" Value="14" />
+        <Setter Property="FlowDirection" Value="{Binding $self.Text, Converter={x:Static converters:CustomConverters.TextFlowDirectionConverter}}"/>
+        <Setter Property="TextAlignment" Value="{Binding $self.Text, Converter={x:Static converters:CustomConverters.TextFlowDirectionConverter}}" />
+    </Style>
+    <Style Selector="SelectableTextBlock">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FlowDirection" Value="{Binding $self.Text, Converter={x:Static converters:CustomConverters.TextFlowDirectionConverter}}"/>
+        <Setter Property="TextAlignment" Value="{Binding $self.Text, Converter={x:Static converters:CustomConverters.TextFlowDirectionConverter}}" />
     </Style>
     <Style Selector="TextBlock.h1">
         <Setter Property="FontSize" Value="18" />
@@ -63,9 +76,9 @@
         <Setter Property="Foreground" Value="{DynamicResource HintForeground}" />
     </Style>
 
-    <!--TextBox-->
+    <!-- TextBox -->
     <Style Selector="TextBox">
-        <Setter Property="FlowDirection" Value="{Binding $self.Text, Converter={x:Static converters:CustomConverters.TextFlowDirectionConverter}, ConverterParameter=LeftToRight}"/>
+        <Setter Property="FlowDirection" Value="{Binding $self.Text, Converter={x:Static converters:CustomConverters.TextFlowDirectionConverter}}"/>
     </Style>
 
     <!--  Button  -->
