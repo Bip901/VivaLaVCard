@@ -40,7 +40,7 @@
     "call_tooltip": "Call",
     "email": "Email",
     "email_tooltip": "Email", // Email as a verb
-    "section_title_work": "Job title",
+    "section_title_work": "Work info",
     "job_title": "Job title",
     "department": "Department",
     "company": "Company",

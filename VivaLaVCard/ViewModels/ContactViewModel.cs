@@ -108,6 +108,7 @@ public sealed class ContactViewModel : ViewModelBase
             }
             AddNameSection();
             AddContactSection();
+            AddWorkSection();
             AddCustomFieldsSection();
             return new ContactViewModel(displayName, photo, sections, vCard);
         }
@@ -141,15 +142,18 @@ public sealed class ContactViewModel : ViewModelBase
             AddField(Strings.name_phonetic_first, ConsumeNonStandardValue("X-PHONETIC-FIRST-NAME"));
             AddField(Strings.name_phonetic_middle, ConsumeNonStandardValue("X-PHONETIC-MIDDLE-NAME"));
             AddField(Strings.name_phonetic_last, ConsumeNonStandardValue("X-PHONETIC-LAST-NAME"));
-            foreach (StringCollectionProperty? nickNamesProperty in vCard.NickNames ?? [])
+            if (vCard.NickNames != null)
             {
-                if (nickNamesProperty?.Value is null)
+                foreach (StringCollectionProperty? nickNamesProperty in vCard.NickNames)
                 {
-                    continue;
-                }
-                foreach (string nickName in nickNamesProperty.Value)
-                {
-                    AddField(Strings.nickname, nickName);
+                    if (nickNamesProperty is null)
+                    {
+                        continue;
+                    }
+                    foreach (string nickName in nickNamesProperty.Value)
+                    {
+                        AddField(Strings.nickname, nickName);
+                    }
                 }
             }
             FlushSection(Strings.section_title_name);
@@ -232,6 +236,33 @@ public sealed class ContactViewModel : ViewModelBase
                 }
             }
             FlushSection(Strings.section_title_contact);
+        }
+
+        private void AddWorkSection()
+        {
+            if (vCard.Titles != null)
+            {
+                foreach (TextProperty? title in vCard.Titles)
+                {
+                    AddField(Strings.job_title, title?.Value);
+                }
+            }
+            if (vCard.Organizations != null)
+            {
+                foreach (OrgProperty? organization in vCard.Organizations)
+                {
+                    if (organization == null)
+                    {
+                        continue;
+                    }
+                    AddField(Strings.company, organization.Value.Name);
+                    if (organization.Value.Units != null)
+                    {
+                        AddField(Strings.department, string.Join(" / ", organization.Value.Units));
+                    }
+                }
+            }
+            FlushSection(Strings.section_title_work);
         }
 
         private static string? GetNonStandardType(TextProperty? textProperty)

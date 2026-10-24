@@ -7,6 +7,7 @@ using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using FolkerKinzel.VCards;
 using FolkerKinzel.VCards.Enums;
+using FolkerKinzel.VCards.Models;
 using VivaLaVCard.ViewModels;
 
 namespace VivaLaVCard.Views;
@@ -20,22 +21,39 @@ public partial class ContactView : UserControl
         if (Design.IsDesignMode && DataContext is null)
         {
             VCardBuilder vCardBuilder = VCardBuilder.Create();
-            vCardBuilder.DisplayNames.Add("John Doe");
+            vCardBuilder.DisplayNames.Add("Dr. John Doe");
             NameBuilder nameBuilder = NameBuilder.Create();
             nameBuilder.AddPrefix("Dr");
             nameBuilder.AddGiven("John");
-            nameBuilder.AddGiven2("Danger");
             nameBuilder.AddSurname("Doe");
-            nameBuilder.AddSuffix("The Third");
             vCardBuilder.NameViews.Add(nameBuilder.Build());
             vCardBuilder.NickNames.Add("Johnny");
             vCardBuilder.Phones.Add("+11234", paramters => paramters.PhoneType = Tel.Voice);
-            vCardBuilder.Phones.Add(
-                "+14567",
-                paramters => paramters.NonStandard = [new KeyValuePair<string, string>("TYPE", "X-TLX")]
-            );
             vCardBuilder.Phones.Add("+19999", paramters => paramters.PropertyClass = PCl.Work);
             vCardBuilder.EMails.Add("john@example.com");
+            vCardBuilder.Titles.Add("Senior Thingy Doer");
+            vCardBuilder.Organizations.Add(new Organization("Acme Corp", ["Department of Thingys"]));
+            AddressBuilder addressBuilder = AddressBuilder.Create();
+            addressBuilder.AddStreet("Some street");
+            addressBuilder.AddLocality("Some locality");
+            addressBuilder.AddRegion("Some region ");
+            addressBuilder.AddPostalCode("Some postal code");
+            addressBuilder.AddCountry("Some country");
+            vCardBuilder.Addresses.Add(
+                addressBuilder.Build(),
+                parameters =>
+                {
+                    parameters.PropertyClass = PCl.Home;
+                }
+            );
+            vCardBuilder.BirthDayViews.Add(DateAndOrTime.Create(new DateOnly(2000, 1, 1)));
+            vCardBuilder.NonStandards.Add(
+                "X-ANDROID-CUSTOM",
+                "vnd.android.cursor.item/relation;Sis Johanson;13;;;;;;;;;;;;;"
+            );
+            vCardBuilder.Notes.Add("Johnny my man!\n😍");
+            vCardBuilder.Urls.Add("https://example.com");
+            vCardBuilder.Urls.Add("https://example.org");
             DataContext = ContactViewModel.FromVCard(vCardBuilder.VCard);
         }
 #endif
