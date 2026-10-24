@@ -41,7 +41,7 @@ public partial class ContactView : UserControl
                     parameters.PropertyClass = PCl.Home;
                 }
             );
-            vCardBuilder.BirthDayViews.Add(DateAndOrTime.Create(new DateOnly(2000, 1, 1)));
+            vCardBuilder.BirthDayViews.Add(DateAndOrTime.Create(new DateOnly(2000, 1, 13)));
             vCardBuilder.NonStandards.Add(
                 "X-ANDROID-CUSTOM",
                 "vnd.android.cursor.item/relation;Sis Johanson;13;;;;;;;;;;;;;"

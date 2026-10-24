@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,6 +21,7 @@ partial class ContactViewModel
         private string displayName = string.Empty;
         private List<ContactFieldViewModel> fields = [];
         private readonly Dictionary<string, List<string>> nonStandards = [];
+        private readonly Dictionary<string, List<string[]>> androidNonStandards = [];
         private IImage? photo;
 
         public Builder(VCard vCard)
@@ -34,27 +36,13 @@ partial class ContactViewModel
                 ?? vCard.Phones?.FirstOrDefault(property => !string.IsNullOrWhiteSpace(property?.Value))?.Value
                 ?? string.Empty;
             photo = TryLoadPhoto();
-            nonStandards.Clear();
-            if (vCard.NonStandards != null)
-            {
-                foreach (var nonStandard in vCard.NonStandards)
-                {
-                    if (nonStandard == null)
-                    {
-                        continue;
-                    }
-                    if (!nonStandards.TryGetValue(nonStandard.Key, out List<string>? values))
-                    {
-                        values = [];
-                        nonStandards[nonStandard.Key] = values;
-                    }
-                    values.Add(nonStandard.Value);
-                }
-            }
+            ParseNonStandards();
             AddNameSection();
             AddContactSection();
             AddWorkSection();
             AddAddressesSection();
+            AddImportantDatesSection();
+            AddRelationshipsSection();
             AddExtraInformationSection();
             return new ContactViewModel(displayName, photo, sections, vCard);
         }
@@ -77,6 +65,46 @@ partial class ContactViewModel
             }
         }
 
+        private void ParseNonStandards()
+        {
+            nonStandards.Clear();
+            androidNonStandards.Clear();
+            if (vCard.NonStandards != null)
+            {
+                foreach (var nonStandard in vCard.NonStandards)
+                {
+                    if (nonStandard == null)
+                    {
+                        continue;
+                    }
+                    if (nonStandard.Key == "X-ANDROID-CUSTOM")
+                    {
+                        string[] entries = nonStandard.Value.Split(';');
+                        if (entries.Length == 0)
+                        {
+                            continue;
+                        }
+                        string mimeType = entries[0];
+                        if (!androidNonStandards.TryGetValue(mimeType, out List<string[]>? values))
+                        {
+                            values = [];
+                            androidNonStandards[mimeType] = values;
+                        }
+                        values.Add(entries);
+                    }
+                    else
+                    {
+                        if (!nonStandards.TryGetValue(nonStandard.Key, out List<string>? values))
+                        {
+                            values = [];
+                            nonStandards[nonStandard.Key] = values;
+                        }
+                        values.Add(nonStandard.Value);
+                    }
+                }
+            }
+        }
+
         private void AddNameSection()
         {
             Name? name = vCard.NameViews?.FirstOrDefault(property => property is { IsEmpty: false })?.Value;
@@ -85,9 +113,18 @@ partial class ContactViewModel
             AddTextField(Strings.name_middle, JoinValues(name?.Given2));
             AddTextField(Strings.name_last, JoinValues(name?.Surnames));
             AddTextField(Strings.name_suffix, JoinValues(name?.Suffixes));
-            AddTextField(Strings.name_phonetic_first, ConsumeNonStandardValue("X-PHONETIC-FIRST-NAME"));
-            AddTextField(Strings.name_phonetic_middle, ConsumeNonStandardValue("X-PHONETIC-MIDDLE-NAME"));
-            AddTextField(Strings.name_phonetic_last, ConsumeNonStandardValue("X-PHONETIC-LAST-NAME"));
+            foreach (string value in ConsumeNonStandardValues("X-PHONETIC-FIRST-NAME"))
+            {
+                AddTextField(Strings.name_phonetic_first, value);
+            }
+            foreach (string value in ConsumeNonStandardValues("X-PHONETIC-MIDDLE-NAME"))
+            {
+                AddTextField(Strings.name_phonetic_middle, value);
+            }
+            foreach (string value in ConsumeNonStandardValues("X-PHONETIC-LAST-NAME"))
+            {
+                AddTextField(Strings.name_phonetic_last, value);
+            }
             if (vCard.NickNames != null)
             {
                 foreach (StringCollectionProperty? nickNamesProperty in vCard.NickNames)
@@ -275,6 +312,89 @@ partial class ContactViewModel
             return null;
         }
 
+        private void AddImportantDatesSection()
+        {
+            if (vCard.BirthDayViews != null)
+            {
+                foreach (DateAndOrTimeProperty? prop in vCard.BirthDayViews)
+                {
+                    if (prop == null)
+                    {
+                        continue;
+                    }
+                    AddTextField(Strings.birthday, ToString(prop.Value));
+                }
+            }
+            if (vCard.AnniversaryViews != null)
+            {
+                foreach (DateAndOrTimeProperty? prop in vCard.AnniversaryViews)
+                {
+                    if (prop == null)
+                    {
+                        continue;
+                    }
+                    AddTextField(Strings.anniversary, ToString(prop.Value));
+                }
+            }
+            foreach (string[] values in ConsumeAndroidNonStandardValues("vnd.android.cursor.item/contact_event"))
+            {
+                if (values.Length < 3)
+                {
+                    continue;
+                }
+                string startDate = values[1]; // Format: yyyy-MM-dd or --MM-dd
+                DateAndOrTime date;
+                if (startDate.StartsWith("--"))
+                {
+                    if (!DateOnly.TryParseExact("0001" + startDate[1..], "yyyy-MM-dd", out DateOnly result))
+                    {
+                        continue;
+                    }
+                    date = DateAndOrTime.Create(result, ignoreYear: true);
+                }
+                else
+                {
+                    if (!DateOnly.TryParseExact(startDate, "yyyy-MM-dd", out DateOnly result))
+                    {
+                        continue;
+                    }
+                    date = DateAndOrTime.Create(result);
+                }
+                if (!int.TryParse(values[2], out int kind))
+                {
+                    continue;
+                }
+                string label = string.Empty;
+                if (values.Length > 3)
+                {
+                    label = values[3];
+                }
+                if (label.Length == 0)
+                {
+                    // Android.Provider.EventDataKind:
+                    // Custom = 0
+                    // Anniversary = 1
+                    // Other = 2
+                    // Birthday = 3
+                    label = kind switch
+                    {
+                        1 => Strings.anniversary,
+                        2 => Strings.event_type_other,
+                        3 => Strings.birthday,
+                        _ => Strings.event_type_other,
+                    };
+                }
+                AddTextField(label, ToString(date));
+            }
+            FlushSection(Strings.section_title_important_dates);
+        }
+
+        private void AddRelationshipsSection()
+        {
+            // TODO
+            FlushSection(Strings.section_title_relationships);
+        }
+
         private void AddExtraInformationSection()
         {
             if (vCard.Notes != null)
@@ -302,6 +422,13 @@ partial class ContactViewModel
                     AddTextField(pair.Key, value);
                 }
             }
+            foreach (KeyValuePair<string, List<string[]>> pair in androidNonStandards)
+            {
+                foreach (string[] values in pair.Value)
+                {
+                    AddTextField(pair.Key, string.Join(";", values));
+                }
+            }
             AddTextField(
                 Strings.vcard_version,
                 vCard.Version switch
@@ -315,13 +442,22 @@ partial class ContactViewModel
             FlushSection(Strings.section_title_extra_information);
         }
 
-        private string? ConsumeNonStandardValue(string key)
+        private IList<string> ConsumeNonStandardValues(string key)
         {
-            if (nonStandards.Remove(key, out List<string>? values) && values.Count > 0)
+            if (nonStandards.Remove(key, out List<string>? values))
             {
-                return values[0];
+                return values;
             }
-            return null;
+            return Array.Empty<string>();
+        }
+
+        private IList<string[]> ConsumeAndroidNonStandardValues(string mimeType)
+        {
+            if (androidNonStandards.Remove(mimeType, out List<string[]>? values))
+            {
+                return values;
+            }
+            return Array.Empty<string[]>();
         }
 
         private void FlushSection(string title)
@@ -354,6 +490,15 @@ partial class ContactViewModel
                 values.Where(value => !string.IsNullOrWhiteSpace(value)).Select(value => value.Trim())
             );
             return string.IsNullOrWhiteSpace(joined) ? null : joined;
+        }
+
+        private static string ToString(DateAndOrTime dateAndOrTime)
+        {
+            if (dateAndOrTime.DateOnly != null && !dateAndOrTime.HasYear)
+            {
+                return dateAndOrTime.DateOnly.Value.ToString("M");
+            }
+            return dateAndOrTime.AsString();
         }
     }
 }
