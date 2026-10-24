@@ -6,8 +6,7 @@ namespace VivaLaVCard.ViewModels;
 
 public abstract class ContactFieldViewModel
 {
-    public ContactFieldViewModel()
-    {}
+    public ContactFieldViewModel() { }
 
     protected static async Task CopyToClipboardAsync(TopLevel? topLevel, string? value)
     {
