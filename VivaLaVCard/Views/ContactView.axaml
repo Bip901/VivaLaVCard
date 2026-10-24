@@ -6,7 +6,7 @@
              x:Class="VivaLaVCard.Views.ContactView"
              x:DataType="vm:MainWindowViewModel">
     <Grid>
-        <ContentControl Content="{Binding SelectedContact}">
+        <ContentControl Content="{Binding}">
             <ContentControl.ContentTemplate>
                 <DataTemplate x:DataType="vm:ContactViewModel">
                     <ScrollViewer HorizontalScrollBarVisibility="Disabled">
@@ -106,7 +106,7 @@
         <StackPanel
             Margin="32"
             HorizontalAlignment="Center"
-            IsVisible="{Binding SelectedContact, Converter={x:Static converters:ObjectConverters.IsNull}}"
+            IsVisible="{Binding, Converter={x:Static converters:ObjectConverters.IsNull}}"
             MaxWidth="360"
             Spacing="12"
             VerticalAlignment="Center">

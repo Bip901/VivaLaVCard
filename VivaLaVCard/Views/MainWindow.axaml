@@ -164,7 +164,7 @@
                 ResizeDirection="Columns" />
 
             <!--  Contact details  -->
-            <views:ContactView Grid.Column="2" />
+            <views:ContactView Grid.Column="2" DataContext="{Binding SelectedContact}" />
         </Grid>
     </dialogs:ReactiveDialogHost>
 </Window>

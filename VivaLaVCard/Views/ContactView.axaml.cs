@@ -24,7 +24,7 @@ public partial class ContactView : UserControl
             nameBuilder.AddSuffix("The Third");
             vCardBuilder.NameViews.Add(nameBuilder.Build());
             vCardBuilder.NickNames.Add("Johnny");
-            DataContext = new MainWindowViewModel { SelectedContact = ContactViewModel.FromVCard(vCardBuilder.VCard) };
+            DataContext = ContactViewModel.FromVCard(vCardBuilder.VCard);
         }
 #endif
     }
