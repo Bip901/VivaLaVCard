@@ -5,6 +5,7 @@ using System.Linq;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using FolkerKinzel.VCards;
+using FolkerKinzel.VCards.Enums;
 using FolkerKinzel.VCards.Models;
 using FolkerKinzel.VCards.Models.Properties;
 using VivaLaVCard.Resources;
@@ -37,10 +38,9 @@ public sealed class ContactViewModel : ViewModelBase
     public bool MatchesSearch(string query)
     {
         if (
-            vCard.DisplayNames != null
-            && vCard.DisplayNames.Any(displayName =>
-                displayName?.Value?.Contains(query, StringComparison.CurrentCultureIgnoreCase) == true
-            )
+            AnyTextPropertyContains(vCard.DisplayNames, query)
+            || AnyTextPropertyContains(vCard.Phones, query)
+            || AnyTextPropertyContains(vCard.EMails, query)
         )
         {
             return true;
@@ -54,16 +54,18 @@ public sealed class ContactViewModel : ViewModelBase
         {
             return true;
         }
-        if (
-            vCard.Phones != null
-            && vCard.Phones.Any(phone =>
-                phone != null && phone.Value.Contains(query, StringComparison.CurrentCultureIgnoreCase)
-            )
-        )
-        {
-            return true;
-        }
         return false;
+    }
+
+    private static bool AnyTextPropertyContains(IEnumerable<TextProperty?>? properties, string query)
+    {
+        if (properties == null)
+        {
+            return false;
+        }
+        return properties.Any(prop =>
+            prop != null && prop.Value.Contains(query, StringComparison.CurrentCultureIgnoreCase)
+        );
     }
 
     class Builder
@@ -105,6 +107,7 @@ public sealed class ContactViewModel : ViewModelBase
                 }
             }
             AddNameSection();
+            AddContactSection();
             AddCustomFieldsSection();
             return new ContactViewModel(displayName, photo, sections, vCard);
         }
@@ -152,6 +155,111 @@ public sealed class ContactViewModel : ViewModelBase
             FlushSection(Strings.section_title_name);
         }
 
+        private void AddContactSection()
+        {
+            if (vCard.Phones != null)
+            {
+                foreach (TextProperty? phone in vCard.Phones)
+                {
+                    if (phone == null || string.IsNullOrWhiteSpace(phone.Value))
+                    {
+                        continue;
+                    }
+                    string? phoneType;
+                    if (phone.Parameters.PropertyClass == PCl.Home)
+                    {
+                        phoneType = Strings.pcl_home;
+                    }
+                    else if (phone.Parameters.PropertyClass == PCl.Work)
+                    {
+                        phoneType = Strings.pcl_work;
+                    }
+                    else if (phone.Parameters.PhoneType == Tel.Cell)
+                    {
+                        phoneType = Strings.phone_cell;
+                    }
+                    else
+                    {
+                        phoneType = GetNonStandardType(phone);
+                    }
+                    string label = Strings.phone;
+                    if (phoneType != null)
+                    {
+                        label = $"{label} ({phoneType})";
+                    }
+                    fields.Add(new ContactPhoneFieldViewModel(label, phone.Value));
+                }
+            }
+            if (vCard.EMails != null)
+            {
+                foreach (TextProperty? email in vCard.EMails)
+                {
+                    if (email == null || string.IsNullOrWhiteSpace(email.Value))
+                    {
+                        continue;
+                    }
+                    string? emailType;
+                    if (email.Parameters.PropertyClass == PCl.Home)
+                    {
+                        emailType = Strings.pcl_home;
+                    }
+                    else if (email.Parameters.PropertyClass == PCl.Work)
+                    {
+                        emailType = Strings.pcl_work;
+                    }
+                    else
+                    {
+                        emailType = email.Parameters.EMailType;
+                        if (emailType == EMail.SMTP)
+                        {
+                            emailType = null; // "INTERNET" is not interesting information
+                        }
+                        else if (emailType == "HOME")
+                        {
+                            emailType = Strings.pcl_home;
+                        }
+                        else if (emailType == "WORK")
+                        {
+                            emailType = Strings.pcl_work;
+                        }
+                    }
+                    string label = Strings.email;
+                    if (emailType != null)
+                    {
+                        label = $"{label} ({emailType})";
+                    }
+                    fields.Add(new ContactEmailFieldViewModel(label, email.Value));
+                }
+            }
+            FlushSection(Strings.section_title_contact);
+        }
+
+        private static string? GetNonStandardType(TextProperty? textProperty)
+        {
+            if (textProperty == null)
+            {
+                return null;
+            }
+            if (textProperty.Parameters.NonStandard == null)
+            {
+                return null;
+            }
+            foreach (var nonStandard in textProperty.Parameters.NonStandard)
+            {
+                if (nonStandard.Key != "TYPE")
+                {
+                    continue;
+                }
+                string result = nonStandard.Value;
+                if (result.StartsWith("X-"))
+                {
+                    result = result["X-".Length..];
+                }
+                return result;
+            }
+            return null;
+        }
+
         private void AddCustomFieldsSection()
         {
             foreach (KeyValuePair<string, List<string>> pair in nonStandards)
@@ -183,7 +291,7 @@ public sealed class ContactViewModel : ViewModelBase
             fields = new List<ContactFieldViewModel>();
         }
 
-        private void AddField(string? label, string? value)
+        private void AddField(string label, string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
             {

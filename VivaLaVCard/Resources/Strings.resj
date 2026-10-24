@@ -34,7 +34,12 @@
     "nickname": "Nickname",
     "section_title_contact": "Contact", // Contact as a verb
     "phone": "Phone",
+    "phone_cell": "Cell",
+    "pcl_home": "Home",
+    "pcl_work": "Work",
+    "call_tooltip": "Call",
     "email": "Email",
+    "email_tooltip": "Email", // Email as a verb
     "section_title_work": "Job title",
     "job_title": "Job title",
     "department": "Department",
