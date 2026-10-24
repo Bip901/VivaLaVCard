@@ -209,6 +209,10 @@ partial class ContactViewModel
                         {
                             emailType = Strings.pcl_work;
                         }
+                        else if (emailType != null && emailType.StartsWith("X-"))
+                        {
+                            emailType = emailType["X-".Length..];
+                        }
                     }
                     string label = Strings.email;
                     if (emailType != null)
