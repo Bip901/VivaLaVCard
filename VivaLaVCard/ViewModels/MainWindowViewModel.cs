@@ -128,6 +128,11 @@ public sealed class MainWindowViewModel : ViewModelBase
             }
         }
         Refilter();
+        if (searchQuery.Length == 0 && SelectedContact == null && FilteredContacts.Count == 1)
+        {
+            // Just loaded a file with only 1 contact, select it.
+            SelectedContact = FilteredContacts[0];
+        }
     }
 
     public void RemoveFile(VCardFileViewModel file)
