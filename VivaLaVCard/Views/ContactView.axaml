@@ -5,6 +5,13 @@
              xmlns:vm="using:VivaLaVCard.ViewModels"
              x:Class="VivaLaVCard.Views.ContactView"
              x:DataType="vm:MainWindowViewModel">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/DataTemplates/ContactField.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <ContentControl Content="{Binding}">
             <ContentControl.ContentTemplate>
@@ -63,100 +70,10 @@
                                                     </ItemsPanelTemplate>
                                                 </ItemsControl.ItemsPanel>
                                                 <ItemsControl.DataTemplates>
-                                                    <DataTemplate x:DataType="vm:ContactPhoneFieldViewModel">
-                                                        <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="12">
-                                                            <TextBlock
-                                                                MinWidth="110"
-                                                                MaxWidth="160"
-                                                                VerticalAlignment="Center"
-                                                                Classes="hint"
-                                                                IsVisible="{Binding Label, Converter={x:Static converters:StringConverters.IsNotNullOrEmpty}}"
-                                                                Text="{Binding Label}"
-                                                                TextWrapping="Wrap" />
-                                                            <SelectableTextBlock
-                                                                VerticalAlignment="Center"
-                                                                Focusable="False"
-                                                                Grid.Column="1"
-                                                                Text="{Binding Value}"
-                                                                TextWrapping="Wrap" />
-                                                            <Button
-                                                                Grid.Column="2"
-                                                                ToolTip.Tip="{x:Static res:Strings.call_tooltip}"
-                                                                VerticalAlignment="Center"
-                                                                Classes="round"
-                                                                Click="CallButton_Click">
-                                                                <PathIcon Data="{StaticResource IconCall}" />
-                                                            </Button>
-                                                            <Button
-                                                                Grid.Column="3"
-                                                                ToolTip.Tip="{x:Static res:Strings.copy_tooltip}"
-                                                                VerticalAlignment="Center"
-                                                                Classes="round"
-                                                                Click="CopyButton_Click">
-                                                                <PathIcon Data="{StaticResource IconCopy}" />
-                                                            </Button>
-                                                        </Grid>
-                                                    </DataTemplate>
-                                                    <DataTemplate x:DataType="vm:ContactEmailFieldViewModel">
-                                                        <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="12">
-                                                            <TextBlock
-                                                                MinWidth="110"
-                                                                MaxWidth="160"
-                                                                VerticalAlignment="Center"
-                                                                Classes="hint"
-                                                                IsVisible="{Binding Label, Converter={x:Static converters:StringConverters.IsNotNullOrEmpty}}"
-                                                                Text="{Binding Label}"
-                                                                TextWrapping="Wrap" />
-                                                            <SelectableTextBlock
-                                                                VerticalAlignment="Center"
-                                                                Focusable="False"
-                                                                Grid.Column="1"
-                                                                Text="{Binding Value}"
-                                                                TextWrapping="Wrap" />
-                                                            <Button
-                                                                Grid.Column="2"
-                                                                ToolTip.Tip="{x:Static res:Strings.email_tooltip}"
-                                                                VerticalAlignment="Center"
-                                                                Classes="round"
-                                                                Click="MailButton_Click">
-                                                                <PathIcon Data="{StaticResource IconMail}" />
-                                                            </Button>
-                                                            <Button
-                                                                Grid.Column="3"
-                                                                ToolTip.Tip="{x:Static res:Strings.copy_tooltip}"
-                                                                VerticalAlignment="Center"
-                                                                Classes="round"
-                                                                Click="CopyButton_Click">
-                                                                <PathIcon Data="{StaticResource IconCopy}" />
-                                                            </Button>
-                                                        </Grid>
-                                                    </DataTemplate>
-                                                    <DataTemplate x:DataType="vm:ContactFieldViewModel">
-                                                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
-                                                            <TextBlock
-                                                                MinWidth="110"
-                                                                MaxWidth="160"
-                                                                VerticalAlignment="Center"
-                                                                Classes="hint"
-                                                                IsVisible="{Binding Label, Converter={x:Static converters:StringConverters.IsNotNullOrEmpty}}"
-                                                                Text="{Binding Label}"
-                                                                TextWrapping="Wrap" />
-                                                            <SelectableTextBlock
-                                                                VerticalAlignment="Center"
-                                                                Focusable="False"
-                                                                Grid.Column="1"
-                                                                Text="{Binding Value}"
-                                                                TextWrapping="Wrap" />
-                                                            <Button
-                                                                Grid.Column="2"
-                                                                ToolTip.Tip="{x:Static res:Strings.copy_tooltip}"
-                                                                VerticalAlignment="Center"
-                                                                Classes="round"
-                                                                Click="CopyButton_Click">
-                                                                <PathIcon Data="{StaticResource IconCopy}" />
-                                                            </Button>
-                                                        </Grid>
-                                                    </DataTemplate>
+                                                    <StaticResourceExtension ResourceKey="ContactAddressField"/>
+                                                    <StaticResourceExtension ResourceKey="ContactEmailField"/>
+                                                    <StaticResourceExtension ResourceKey="ContactPhoneField"/>
+                                                    <StaticResourceExtension ResourceKey="ContactTextField"/>
                                                 </ItemsControl.DataTemplates>
                                             </ItemsControl>
                                         </StackPanel>

@@ -54,7 +54,8 @@ partial class ContactViewModel
             AddNameSection();
             AddContactSection();
             AddWorkSection();
-            AddCustomFieldsSection();
+            AddAddressesSection();
+            AddExtraInformationSection();
             return new ContactViewModel(displayName, photo, sections, vCard);
         }
 
@@ -79,14 +80,14 @@ partial class ContactViewModel
         private void AddNameSection()
         {
             Name? name = vCard.NameViews?.FirstOrDefault(property => property is { IsEmpty: false })?.Value;
-            AddField(Strings.name_prefix, JoinValues(name?.Prefixes));
-            AddField(Strings.name_first, JoinValues(name?.Given));
-            AddField(Strings.name_middle, JoinValues(name?.Given2));
-            AddField(Strings.name_last, JoinValues(name?.Surnames));
-            AddField(Strings.name_suffix, JoinValues(name?.Suffixes));
-            AddField(Strings.name_phonetic_first, ConsumeNonStandardValue("X-PHONETIC-FIRST-NAME"));
-            AddField(Strings.name_phonetic_middle, ConsumeNonStandardValue("X-PHONETIC-MIDDLE-NAME"));
-            AddField(Strings.name_phonetic_last, ConsumeNonStandardValue("X-PHONETIC-LAST-NAME"));
+            AddTextField(Strings.name_prefix, JoinValues(name?.Prefixes));
+            AddTextField(Strings.name_first, JoinValues(name?.Given));
+            AddTextField(Strings.name_middle, JoinValues(name?.Given2));
+            AddTextField(Strings.name_last, JoinValues(name?.Surnames));
+            AddTextField(Strings.name_suffix, JoinValues(name?.Suffixes));
+            AddTextField(Strings.name_phonetic_first, ConsumeNonStandardValue("X-PHONETIC-FIRST-NAME"));
+            AddTextField(Strings.name_phonetic_middle, ConsumeNonStandardValue("X-PHONETIC-MIDDLE-NAME"));
+            AddTextField(Strings.name_phonetic_last, ConsumeNonStandardValue("X-PHONETIC-LAST-NAME"));
             if (vCard.NickNames != null)
             {
                 foreach (StringCollectionProperty? nickNamesProperty in vCard.NickNames)
@@ -97,7 +98,7 @@ partial class ContactViewModel
                     }
                     foreach (string nickName in nickNamesProperty.Value)
                     {
-                        AddField(Strings.nickname, nickName);
+                        AddTextField(Strings.nickname, nickName);
                     }
                 }
             }
@@ -189,7 +190,7 @@ partial class ContactViewModel
             {
                 foreach (TextProperty? title in vCard.Titles)
                 {
-                    AddField(Strings.job_title, title?.Value);
+                    AddTextField(Strings.job_title, title?.Value);
                 }
             }
             if (vCard.Organizations != null)
@@ -200,27 +201,65 @@ partial class ContactViewModel
                     {
                         continue;
                     }
-                    AddField(Strings.company, organization.Value.Name);
+                    AddTextField(Strings.company, organization.Value.Name);
                     if (organization.Value.Units != null)
                     {
-                        AddField(Strings.department, string.Join(" / ", organization.Value.Units));
+                        AddTextField(Strings.department, string.Join(" / ", organization.Value.Units));
                     }
                 }
             }
             FlushSection(Strings.section_title_work);
         }
 
-        private static string? GetNonStandardType(TextProperty? textProperty)
+        private void AddAddressesSection()
         {
-            if (textProperty == null)
+            if (vCard.Addresses != null)
+            {
+                foreach (AddressProperty? address in vCard.Addresses)
+                {
+                    if (address is null)
+                    {
+                        continue;
+                    }
+                    string addressType;
+                    if (address.Parameters.PropertyClass == PCl.Home)
+                    {
+                        addressType = Strings.pcl_home;
+                    }
+                    else if (address.Parameters.PropertyClass == PCl.Work)
+                    {
+                        addressType = Strings.pcl_work;
+                    }
+                    else
+                    {
+                        addressType = GetNonStandardType(address) ?? Strings.address;
+                    }
+                    fields.Add(
+                        new ContactAddressFieldViewModel(
+                            addressType,
+                            address.Value.Street.FirstOrDefault(),
+                            address.Value.Locality.FirstOrDefault(),
+                            address.Value.Region.FirstOrDefault(),
+                            address.Value.PostalCode.FirstOrDefault(),
+                            address.Value.Country.FirstOrDefault()
+                        )
+                    );
+                }
+            }
+            FlushSection(Strings.section_title_addresses);
+        }
+
+        private static string? GetNonStandardType(VCardProperty? prop)
+        {
+            if (prop == null)
             {
                 return null;
             }
-            if (textProperty.Parameters.NonStandard == null)
+            if (prop.Parameters.NonStandard == null)
             {
                 return null;
             }
-            foreach (var nonStandard in textProperty.Parameters.NonStandard)
+            foreach (var nonStandard in prop.Parameters.NonStandard)
             {
                 if (nonStandard.Key != "TYPE")
                 {
@@ -236,16 +275,26 @@ partial class ContactViewModel
             return null;
         }
 
-        private void AddCustomFieldsSection()
+        private void AddExtraInformationSection()
         {
+            AddTextField(
+                Strings.vcard_version,
+                vCard.Version switch
+                {
+                    VCdVersion.V2_1 => "2.1",
+                    VCdVersion.V3_0 => "3.0",
+                    VCdVersion.V4_0 => "4.0",
+                    _ => vCard.Version.ToString(),
+                }
+            );
             foreach (KeyValuePair<string, List<string>> pair in nonStandards)
             {
                 foreach (string value in pair.Value)
                 {
-                    AddField(pair.Key, value);
+                    AddTextField(pair.Key, value);
                 }
             }
-            FlushSection(Strings.section_title_custom_fields);
+            FlushSection(Strings.section_title_extra_information);
         }
 
         private string? ConsumeNonStandardValue(string key)
@@ -264,16 +313,16 @@ partial class ContactViewModel
                 return;
             }
             sections.Add(new ContactSectionViewModel(title, fields));
-            fields = new List<ContactFieldViewModel>();
+            fields = [];
         }
 
-        private void AddField(string label, string? value)
+        private void AddTextField(string label, string? value)
         {
             if (string.IsNullOrWhiteSpace(value))
             {
                 return;
             }
-            fields.Add(new ContactFieldViewModel(label, value.Trim()));
+            fields.Add(new ContactTextFieldViewModel(label, value.Trim()));
         }
 
         private static string? JoinValues(IReadOnlyList<string>? values)

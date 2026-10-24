@@ -1,0 +1,103 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Platform.Storage;
+using CommunityToolkit.Mvvm.Input;
+using VivaLaVCard.Resources;
+
+namespace VivaLaVCard.ViewModels;
+
+public sealed partial class ContactAddressFieldViewModel : ContactFieldViewModel
+{
+    public string Type { get; }
+
+    public string Street { get; }
+
+    /// <summary>
+    /// City
+    /// </summary>
+    public string Locality { get; }
+
+    public string Region { get; }
+
+    public string PostalCode { get; }
+
+    public string Country { get; }
+
+    public ContactAddressFieldViewModel(
+        string type,
+        string? street,
+        string? locality,
+        string? region,
+        string? postalCode,
+        string? country
+    )
+    {
+        Type = type;
+        Street = street ?? string.Empty;
+        Locality = locality ?? string.Empty;
+        Region = region ?? string.Empty;
+        PostalCode = postalCode ?? string.Empty;
+        Country = country ?? string.Empty;
+    }
+
+#if DEBUG
+    // For designer
+    public ContactAddressFieldViewModel()
+        : this(Strings.pcl_home, "Some street", "Some locality", "Some region", "Some postal code", "Some country") { }
+#endif
+
+    [RelayCommand]
+    public void CopyStreetButtonClickCommand(TopLevel? topLevel)
+    {
+        _ = CopyToClipboardAsync(topLevel, Street);
+    }
+
+    [RelayCommand]
+    public void CopyLocalityButtonClickCommand(TopLevel? topLevel)
+    {
+        _ = CopyToClipboardAsync(topLevel, Locality);
+    }
+
+    [RelayCommand]
+    public void CopyRegionButtonClickCommand(TopLevel? topLevel)
+    {
+        _ = CopyToClipboardAsync(topLevel, Region);
+    }
+
+    [RelayCommand]
+    public void CopyPostalCodeButtonClickCommand(TopLevel? topLevel)
+    {
+        _ = CopyToClipboardAsync(topLevel, PostalCode);
+    }
+
+    [RelayCommand]
+    public void CopyCountryButtonClickCommand(TopLevel? topLevel)
+    {
+        _ = CopyToClipboardAsync(topLevel, Country);
+    }
+
+    [RelayCommand]
+    public void MapButtonClickCommand(TopLevel? topLevel)
+    {
+        ILauncher? launcher = topLevel?.Launcher;
+        if (launcher == null)
+        {
+            return;
+        }
+        List<string> parts = [Street, Locality, Region, Country];
+        for (int i = 0; i < parts.Count; i++)
+        {
+            if (string.IsNullOrWhiteSpace(parts[i]))
+            {
+                parts.RemoveAt(i);
+                i--;
+                continue;
+            }
+        }
+        // TODO: Allow choosing https://www.google.com/maps/search/
+        Uri uri = new("https://www.openstreetmap.org/search?query=" + Uri.EscapeDataString(string.Join(", ", parts)));
+        _ = launcher.LaunchUriAsync(uri);
+    }
+}

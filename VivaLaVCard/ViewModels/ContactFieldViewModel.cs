@@ -1,14 +1,21 @@
+using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Input.Platform;
+
 namespace VivaLaVCard.ViewModels;
 
-public class ContactFieldViewModel
+public abstract class ContactFieldViewModel
 {
-    public string Label { get; }
+    public ContactFieldViewModel()
+    {}
 
-    public string Value { get; }
-
-    public ContactFieldViewModel(string label, string value)
+    protected static async Task CopyToClipboardAsync(TopLevel? topLevel, string? value)
     {
-        Label = label;
-        Value = value;
+        IClipboard? clipboard = topLevel?.Clipboard;
+        if (clipboard == null)
+        {
+            return;
+        }
+        await clipboard.SetTextAsync(value);
     }
 }

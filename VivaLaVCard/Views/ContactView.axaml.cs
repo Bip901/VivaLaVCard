@@ -1,10 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Avalonia.Controls;
-using Avalonia.Input.Platform;
-using Avalonia.Interactivity;
-using Avalonia.Platform.Storage;
 using FolkerKinzel.VCards;
 using FolkerKinzel.VCards.Enums;
 using FolkerKinzel.VCards.Models;
@@ -57,65 +52,5 @@ public partial class ContactView : UserControl
             DataContext = ContactViewModel.FromVCard(vCardBuilder.VCard);
         }
 #endif
-    }
-
-    private async void CopyButton_Click(object? sender, RoutedEventArgs e)
-    {
-        if (sender is not Button { DataContext: ContactFieldViewModel field })
-        {
-            return;
-        }
-        IClipboard? clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
-        if (clipboard == null)
-        {
-            return;
-        }
-        await clipboard.SetTextAsync(field.Value);
-    }
-
-    private async void CallButton_Click(object? sender, RoutedEventArgs e)
-    {
-        if (sender is not Button { DataContext: ContactPhoneFieldViewModel field })
-        {
-            return;
-        }
-        ILauncher? launcher = TopLevel.GetTopLevel(this)?.Launcher;
-        if (launcher == null)
-        {
-            return;
-        }
-        string stripped = UeslessTelCharactersRegex().Replace(field.Value, "");
-        if (!Uri.TryCreate($"tel:{stripped}", UriKind.Absolute, out Uri? uri))
-        {
-            return;
-        }
-        await launcher.LaunchUriAsync(uri);
-    }
-
-    [GeneratedRegex("[^0-9+]")]
-    private static partial Regex UeslessTelCharactersRegex();
-
-    private async void MailButton_Click(object? sender, RoutedEventArgs e)
-    {
-        if (sender is not Button { DataContext: ContactEmailFieldViewModel field })
-        {
-            return;
-        }
-        ILauncher? launcher = TopLevel.GetTopLevel(this)?.Launcher;
-        if (launcher == null)
-        {
-            return;
-        }
-        string[] parts = field.Value.Split('@');
-        for (int i = 0; i < parts.Length; i++)
-        {
-            parts[i] = Uri.EscapeDataString(parts[i]);
-        }
-        string escaped = string.Join('@', parts);
-        if (!Uri.TryCreate($"mailto:{escaped}", UriKind.Absolute, out Uri? uri))
-        {
-            return;
-        }
-        await launcher.LaunchUriAsync(uri);
     }
 }

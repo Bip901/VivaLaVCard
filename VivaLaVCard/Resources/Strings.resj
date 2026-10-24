@@ -45,11 +45,19 @@
     "department": "Department",
     "company": "Company",
     "section_title_addresses": "Addresses",
+    "address": "Address",
+    "address_street": "Street",
+    "address_locality": "City",
+    "address_region": "Region",
+    "address_postal_code": "Postal code",
+    "address_country": "Country",
+    "open_map_tooltip": "Open map",
     "section_title_important_dates": "Important Dates",
     "birthday": "Birthday",
     "section_title_relationships": "Relationships",
     "notes": "Notes",
     "websites": "Websites",
-    "section_title_custom_fields": "Custom fields"
+    "section_title_extra_information": "Extra information",
+    "vcard_version": "vCard Version"
   }
 }
