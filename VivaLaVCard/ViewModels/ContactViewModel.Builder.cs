@@ -430,7 +430,7 @@ partial class ContactViewModel
             {
                 foreach (string[] values in pair.Value)
                 {
-                    AddTextField(pair.Key, string.Join(";", values));
+                    AddTextField(pair.Key, string.Join(";", values.Skip(1)));
                 }
             }
             AddTextField(
