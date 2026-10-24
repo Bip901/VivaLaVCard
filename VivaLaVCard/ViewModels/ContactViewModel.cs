@@ -41,6 +41,7 @@ public sealed class ContactViewModel : ViewModelBase
             AnyTextPropertyContains(vCard.DisplayNames, query)
             || AnyTextPropertyContains(vCard.Phones, query)
             || AnyTextPropertyContains(vCard.EMails, query)
+            || AnyTextPropertyContains(vCard.Titles, query)
         )
         {
             return true;
@@ -53,6 +54,27 @@ public sealed class ContactViewModel : ViewModelBase
         )
         {
             return true;
+        }
+        if (vCard.Organizations != null)
+        {
+            foreach (OrgProperty? org in vCard.Organizations)
+            {
+                if (org is null)
+                {
+                    continue;
+                }
+                if (org.Value.Name != null && org.Value.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return true;
+                }
+                if (
+                    org.Value.Units != null
+                    && org.Value.Units.Any(unit => unit.Contains(query, StringComparison.CurrentCultureIgnoreCase))
+                )
+                {
+                    return true;
+                }
+            }
         }
         return false;
     }
