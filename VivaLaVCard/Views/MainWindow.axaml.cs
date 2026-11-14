@@ -69,6 +69,14 @@ public partial class MainWindow : Window
         }
     }
 
+    private void ContactsList_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (sender is ListBox { SelectedItem: ContactViewModel contact })
+        {
+            ViewModel.SelectedContact = contact;
+        }
+    }
+
     private void OnWindowKeyDown(object? sender, KeyEventArgs e)
     {
         if (e.KeyModifiers == KeyModifiers.Control)

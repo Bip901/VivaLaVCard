@@ -13,7 +13,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <ContentControl Content="{Binding}">
+        <ContentControl Content="{Binding, Mode=OneWay}">
             <ContentControl.ContentTemplate>
                 <DataTemplate x:DataType="vm:ContactViewModel">
                     <ScrollViewer HorizontalScrollBarVisibility="Disabled">

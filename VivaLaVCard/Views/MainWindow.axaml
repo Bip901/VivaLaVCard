@@ -73,7 +73,8 @@
                         IsVisible="{Binding IsContactsView}"
                         ItemsSource="{Binding FilteredContacts}"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                        SelectedItem="{Binding SelectedContact}">
+                        SelectionChanged="ContactsList_SelectionChanged"
+                        SelectedItem="{Binding SelectedContact, Mode=OneWay}">
                         <ListBox.ItemTemplate>
                             <DataTemplate x:DataType="vm:ContactViewModel">
                                 <Grid ColumnDefinitions="40,*" ColumnSpacing="12">
@@ -164,7 +165,7 @@
                 ResizeDirection="Columns" />
 
             <!--  Contact details  -->
-            <views:ContactView Grid.Column="2" DataContext="{Binding SelectedContact}" />
+            <views:ContactView Grid.Column="2" DataContext="{Binding SelectedContact, Mode=OneWay}" />
         </Grid>
     </dialogs:ReactiveDialogHost>
 </Window>
