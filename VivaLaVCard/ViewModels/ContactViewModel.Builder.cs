@@ -29,7 +29,7 @@ partial class ContactViewModel
             this.vCard = vCard;
         }
 
-        public ContactViewModel Build()
+        public ContactViewModel Build(ContactViewModelIndex? contactViewModelIndex = null)
         {
             displayName =
                 vCard.DisplayNames?.FirstOrDefault(property => !string.IsNullOrWhiteSpace(property?.Value))?.Value
@@ -42,7 +42,7 @@ partial class ContactViewModel
             AddWorkSection();
             AddAddressesSection();
             AddImportantDatesSection();
-            AddRelationshipsSection();
+            AddRelationshipsSection(contactViewModelIndex);
             AddExtraInformationSection();
             return new ContactViewModel(displayName, photo, sections, vCard);
         }
@@ -393,7 +393,7 @@ partial class ContactViewModel
             FlushSection(Strings.section_title_important_dates);
         }
 
-        private void AddRelationshipsSection()
+        private void AddRelationshipsSection(ContactViewModelIndex? contactViewModelIndex = null)
         {
             foreach (string[] values in ConsumeAndroidNonStandardValues("vnd.android.cursor.item/relation"))
             {
@@ -415,7 +415,14 @@ partial class ContactViewModel
                 {
                     relationKindLabel = AndroidRelationToString(kind) ?? string.Empty;
                 }
-                fields.Add(new ContactRelationFieldViewModel(relationKindLabel, relativeDisplayName));
+                fields.Add(
+                    new ContactRelationFieldViewModel(
+                        relationKindLabel,
+                        relativeDisplayName,
+                        new ContactViewModelReference_DisplayName(relativeDisplayName),
+                        contactViewModelIndex
+                    )
+                );
             }
             FlushSection(Strings.section_title_relationships);
         }

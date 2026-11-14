@@ -18,6 +18,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     public IReadOnlyList<VCardFileViewModel> FilteredFiles { get; private set; } = [];
 
     private readonly List<VCardFileViewModel> files = [];
+    private readonly ContactViewModelIndex contactViewModelIndex = new();
 
     public string SearchQuery
     {
@@ -114,7 +115,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             }
             try
             {
-                files.Add(new VCardFileViewModel(VCardFile.Load(filePath)));
+                files.Add(new VCardFileViewModel(VCardFile.Load(filePath), contactViewModelIndex));
             }
             catch (Exception ex)
             {
@@ -127,6 +128,7 @@ public sealed class MainWindowViewModel : ViewModelBase
                 await Task.Delay(100);
             }
         }
+        contactViewModelIndex.Regenerate(files.SelectMany(file => file.Contacts));
         Refilter();
         if (searchQuery.Length == 0 && SelectedContact == null && FilteredContacts.Count == 1)
         {

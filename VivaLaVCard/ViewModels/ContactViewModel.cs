@@ -9,9 +9,9 @@ namespace VivaLaVCard.ViewModels;
 
 public sealed partial class ContactViewModel : ViewModelBase
 {
-    public static ContactViewModel FromVCard(VCard vCard)
+    public static ContactViewModel FromVCard(VCard vCard, ContactViewModelIndex? contactViewModelIndex = null)
     {
-        return new Builder(vCard).Build();
+        return new Builder(vCard).Build(contactViewModelIndex);
     }
 
     public string DisplayName { get; }

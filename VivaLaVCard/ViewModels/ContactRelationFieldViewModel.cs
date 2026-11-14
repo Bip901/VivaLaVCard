@@ -8,17 +8,41 @@ public class ContactRelationFieldViewModel : ContactFieldViewModel
 
     public string RelativeDisplayName { get; }
 
-    public IImage? Photo => null;
+    public IImage? Photo
+    {
+        get
+        {
+            if (
+                reference != null
+                && contactViewModelIndex != null
+                && reference.TryResolve(contactViewModelIndex, out ContactViewModel? referredViewModel)
+            )
+            {
+                return referredViewModel.Photo;
+            }
+            return null;
+        }
+    }
 
-    public ContactRelationFieldViewModel(string relationKind, string relativeDisplayName)
+    private readonly ContactViewModelReference? reference;
+    private readonly ContactViewModelIndex? contactViewModelIndex;
+
+    public ContactRelationFieldViewModel(
+        string relationKind,
+        string relativeDisplayName,
+        ContactViewModelReference? reference,
+        ContactViewModelIndex? contactViewModelIndex
+    )
     {
         RelationKind = relationKind;
         RelativeDisplayName = relativeDisplayName;
+        this.reference = reference;
+        this.contactViewModelIndex = contactViewModelIndex;
     }
 
 #if DEBUG
     // For designer
     public ContactRelationFieldViewModel()
-        : this("Mother", "Johanna") { }
+        : this("Mother", "Johanna", null, null) { }
 #endif
 }

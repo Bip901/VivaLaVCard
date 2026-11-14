@@ -13,10 +13,10 @@ public sealed class VCardFileViewModel : ViewModelBase
 {
     private readonly VCardFile _file;
 
-    public VCardFileViewModel(VCardFile file)
+    public VCardFileViewModel(VCardFile file, ContactViewModelIndex? contactViewModelIndex = null)
     {
         _file = file;
-        Contacts = file.VCards.Select(ContactViewModel.FromVCard).ToArray();
+        Contacts = file.VCards.Select(vCard => ContactViewModel.FromVCard(vCard, contactViewModelIndex)).ToArray();
     }
 
     public string FilePath => _file.FilePath;

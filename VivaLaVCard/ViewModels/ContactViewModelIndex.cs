@@ -2,19 +2,22 @@ using System.Collections.Generic;
 
 namespace VivaLaVCard.ViewModels;
 
+/// <summary>
+/// An index to use when resolving <see cref="ContactViewModelReference"/>s.
+/// </summary>
 public class ContactViewModelIndex
 {
     public IReadOnlyDictionary<string, ContactViewModel> ByDisplayName => byDisplayName;
     private readonly Dictionary<string, ContactViewModel> byDisplayName;
 
-    private ContactViewModelIndex(Dictionary<string, ContactViewModel> byDisplayName)
+    public ContactViewModelIndex()
     {
-        this.byDisplayName = byDisplayName;
+        byDisplayName = [];
     }
 
-    public static ContactViewModelIndex Generate(IEnumerable<ContactViewModel> viewModels)
+    public void Regenerate(IEnumerable<ContactViewModel> viewModels)
     {
-        Dictionary<string, ContactViewModel> byDisplayName = [];
+        byDisplayName.Clear();
         foreach (ContactViewModel viewModel in viewModels)
         {
             if (byDisplayName.ContainsKey(viewModel.DisplayName))
@@ -23,6 +26,5 @@ public class ContactViewModelIndex
             }
             byDisplayName[viewModel.DisplayName] = viewModel;
         }
-        return new ContactViewModelIndex(byDisplayName);
     }
 }
