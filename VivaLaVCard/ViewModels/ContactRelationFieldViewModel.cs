@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+using Avalonia.Controls;
 using Avalonia.Media;
 
 namespace VivaLaVCard.ViewModels;
@@ -12,11 +14,7 @@ public class ContactRelationFieldViewModel : ContactFieldViewModel
     {
         get
         {
-            if (
-                reference != null
-                && contactViewModelIndex != null
-                && reference.TryResolve(contactViewModelIndex, out ContactViewModel? referredViewModel)
-            )
+            if (TryResolve(out ContactViewModel? referredViewModel))
             {
                 return referredViewModel.Photo;
             }
@@ -45,4 +43,25 @@ public class ContactRelationFieldViewModel : ContactFieldViewModel
     public ContactRelationFieldViewModel()
         : this("Mother", "Johanna", null, null) { }
 #endif
+
+    private bool TryResolve([NotNullWhen(true)] out ContactViewModel? referredViewModel)
+    {
+        referredViewModel = null;
+        return reference != null
+            && contactViewModelIndex != null
+            && reference.TryResolve(contactViewModelIndex, out referredViewModel);
+    }
+
+    public void OnTapped(TopLevel? topLevel)
+    {
+        if (
+            reference != null
+            && contactViewModelIndex != null
+            && reference.TryResolve(contactViewModelIndex, out ContactViewModel? referredViewModel)
+            && topLevel?.DataContext is MainWindowViewModel mainWindowViewModel
+        )
+        {
+            mainWindowViewModel.SelectedContact = referredViewModel;
+        }
+    }
 }

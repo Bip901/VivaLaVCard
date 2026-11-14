@@ -134,6 +134,12 @@
         <Setter Property="Background" Value="{DynamicResource CardBackground}" />
         <Setter Property="BoxShadow" Value="{DynamicResource CardBoxShadows}" />
     </Style>
+    <Style Selector="Border.clickable">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <Style Selector="Border.clickable:pointerover">
+        <Setter Property="Background" Value="{DynamicResource ButtonBackgroundPointerOver}" />
+    </Style>
 
     <!--  GridSplitter  -->
     <Style Selector="GridSplitter.sidebar">

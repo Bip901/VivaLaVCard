@@ -1,5 +1,9 @@
 using System;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.VisualTree;
 using FolkerKinzel.VCards;
 using FolkerKinzel.VCards.Enums;
 using FolkerKinzel.VCards.Models;
@@ -12,6 +16,8 @@ public partial class ContactView : UserControl
     public ContactView()
     {
         InitializeComponent();
+        AddHandler(TappedEvent, OnTapped, RoutingStrategies.Bubble);
+
 #if DEBUG
         if (Design.IsDesignMode && DataContext is null)
         {
@@ -52,5 +58,17 @@ public partial class ContactView : UserControl
             DataContext = ContactViewModel.FromVCard(vCardBuilder.VCard);
         }
 #endif
+    }
+
+    private void OnTapped(object? sender, TappedEventArgs e)
+    {
+        for (Visual? visual = e.Source as Visual; visual is not null; visual = visual.GetVisualParent())
+        {
+            if (visual is Border { DataContext: ContactRelationFieldViewModel relationField })
+            {
+                relationField.OnTapped(TopLevel.GetTopLevel(this));
+                return;
+            }
+        }
     }
 }
