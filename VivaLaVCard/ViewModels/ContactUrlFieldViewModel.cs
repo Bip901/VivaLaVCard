@@ -1,12 +1,11 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
-using CommunityToolkit.Mvvm.Input;
 using VivaLaVCard.Resources;
 
 namespace VivaLaVCard.ViewModels;
 
-public sealed partial class ContactUrlFieldViewModel : ContactTextFieldViewModel
+public sealed class ContactUrlFieldViewModel : ContactTextFieldViewModel
 {
     public ContactUrlFieldViewModel(string label, string value)
         : base(label, value) { }
@@ -17,7 +16,6 @@ public sealed partial class ContactUrlFieldViewModel : ContactTextFieldViewModel
         : this(Strings.website, "https://example.com") { }
 #endif
 
-    [RelayCommand]
     public void OpenWebsiteButtonClickCommand(TopLevel? topLevel)
     {
         ILauncher? launcher = topLevel?.Launcher;

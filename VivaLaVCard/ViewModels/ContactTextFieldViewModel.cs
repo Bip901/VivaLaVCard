@@ -1,9 +1,8 @@
 using Avalonia.Controls;
-using CommunityToolkit.Mvvm.Input;
 
 namespace VivaLaVCard.ViewModels;
 
-public partial class ContactTextFieldViewModel : ContactFieldViewModel
+public class ContactTextFieldViewModel : ContactFieldViewModel
 {
     public string Label { get; }
 
@@ -21,7 +20,6 @@ public partial class ContactTextFieldViewModel : ContactFieldViewModel
         : this("Name", "John") { }
 #endif
 
-    [RelayCommand]
     public virtual void CopyButtonClickCommand(TopLevel? topLevel)
     {
         _ = CopyToClipboardAsync(topLevel, Value);

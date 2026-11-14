@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
-using CommunityToolkit.Mvvm.Input;
 using VivaLaVCard.Resources;
 
 namespace VivaLaVCard.ViewModels;
 
-public sealed partial class ContactAddressFieldViewModel : ContactFieldViewModel
+public sealed class ContactAddressFieldViewModel : ContactFieldViewModel
 {
     public string Type { get; }
 
@@ -48,37 +46,31 @@ public sealed partial class ContactAddressFieldViewModel : ContactFieldViewModel
         : this(Strings.pcl_home, "Some street", "Some locality", "Some region", "Some postal code", "Some country") { }
 #endif
 
-    [RelayCommand]
     public void CopyStreetButtonClickCommand(TopLevel? topLevel)
     {
         _ = CopyToClipboardAsync(topLevel, Street);
     }
 
-    [RelayCommand]
     public void CopyLocalityButtonClickCommand(TopLevel? topLevel)
     {
         _ = CopyToClipboardAsync(topLevel, Locality);
     }
 
-    [RelayCommand]
     public void CopyRegionButtonClickCommand(TopLevel? topLevel)
     {
         _ = CopyToClipboardAsync(topLevel, Region);
     }
 
-    [RelayCommand]
     public void CopyPostalCodeButtonClickCommand(TopLevel? topLevel)
     {
         _ = CopyToClipboardAsync(topLevel, PostalCode);
     }
 
-    [RelayCommand]
     public void CopyCountryButtonClickCommand(TopLevel? topLevel)
     {
         _ = CopyToClipboardAsync(topLevel, Country);
     }
 
-    [RelayCommand]
     public void MapButtonClickCommand(TopLevel? topLevel)
     {
         ILauncher? launcher = topLevel?.Launcher;

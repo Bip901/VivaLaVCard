@@ -1,12 +1,11 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
-using CommunityToolkit.Mvvm.Input;
 using VivaLaVCard.Resources;
 
 namespace VivaLaVCard.ViewModels;
 
-public sealed partial class ContactEmailFieldViewModel : ContactTextFieldViewModel
+public sealed class ContactEmailFieldViewModel : ContactTextFieldViewModel
 {
     public ContactEmailFieldViewModel(string label, string value)
         : base(label, value) { }
@@ -17,7 +16,6 @@ public sealed partial class ContactEmailFieldViewModel : ContactTextFieldViewMod
         : this(Strings.email, "user@example.com") { }
 #endif
 
-    [RelayCommand]
     public void MailButtonClickCommand(TopLevel? topLevel)
     {
         ILauncher? launcher = topLevel?.Launcher;

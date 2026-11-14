@@ -2,7 +2,6 @@ using System;
 using System.Text.RegularExpressions;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
-using CommunityToolkit.Mvvm.Input;
 using VivaLaVCard.Resources;
 
 namespace VivaLaVCard.ViewModels;
@@ -18,7 +17,6 @@ public partial class ContactPhoneFieldViewModel : ContactTextFieldViewModel
         : this(Strings.phone, "+11234") { }
 #endif
 
-    [RelayCommand]
     public virtual void CallButtonClickCommand(TopLevel? topLevel)
     {
         ILauncher? launcher = topLevel?.Launcher;
