@@ -75,6 +75,7 @@
                                                     <StaticResourceExtension ResourceKey="ContactPhoneField"/>
                                                     <StaticResourceExtension ResourceKey="ContactUrlField"/>
                                                     <StaticResourceExtension ResourceKey="ContactTextField"/>
+                                                    <StaticResourceExtension ResourceKey="ContactRelationField"/>
                                                 </ItemsControl.DataTemplates>
                                             </ItemsControl>
                                         </StackPanel>

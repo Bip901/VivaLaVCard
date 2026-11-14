@@ -2,6 +2,7 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:res="using:VivaLaVCard.Resources"
+    xmlns:converters="using:Avalonia.Data.Converters"
     xmlns:vm="using:VivaLaVCard.ViewModels">
 
     <Design.PreviewWith>
@@ -20,6 +21,9 @@
             </ContentControl>
             <ContentControl ContentTemplate="{DynamicResource ContactTextField}">
                 <vm:ContactTextFieldViewModel />
+            </ContentControl>
+            <ContentControl ContentTemplate="{DynamicResource ContactRelationField}">
+                <vm:ContactRelationFieldViewModel />
             </ContentControl>
         </StackPanel>
     </Design.PreviewWith>
@@ -293,5 +297,40 @@
                 <PathIcon Data="{StaticResource IconCopy}" />
             </Button>
         </Grid>
+    </DataTemplate>
+    <DataTemplate x:Key="ContactRelationField" x:DataType="vm:ContactRelationFieldViewModel">
+        <StackPanel>
+            <TextBlock Classes="h2" Text="{Binding RelationKind}"  Margin="0 8 0 0"/>
+            <Grid ColumnDefinitions="40,*" ColumnSpacing="12" Margin="0 8 0 0">
+                <Border
+                    Width="40"
+                    Height="40"
+                    Background="{DynamicResource AvatarBackground}"
+                    ClipToBounds="True"
+                    CornerRadius="20">
+                    <Grid>
+                        <Image
+                            Width="40"
+                            Height="40"
+                            Source="{Binding Photo}"
+                            IsVisible="{Binding Photo, Converter={x:Static converters:ObjectConverters.IsNotNull}}"
+                            Stretch="UniformToFill"/>
+                        <PathIcon
+                            Width="22"
+                            Height="22"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            IsVisible="{Binding Photo, Converter={x:Static converters:ObjectConverters.IsNull}}"
+                            Data="{StaticResource IconPerson}"
+                            Foreground="{DynamicResource AvatarForeground}" />
+                    </Grid>
+                </Border>
+                <TextBlock
+                    Grid.Column="1"
+                    Text="{Binding RelativeDisplayName}"
+                    TextTrimming="CharacterEllipsis"
+                    VerticalAlignment="Center" />
+            </Grid>
+        </StackPanel>
     </DataTemplate>
 </ResourceDictionary>

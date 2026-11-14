@@ -395,7 +395,28 @@ partial class ContactViewModel
 
         private void AddRelationshipsSection()
         {
-            // TODO
+            foreach (string[] values in ConsumeAndroidNonStandardValues("vnd.android.cursor.item/relation"))
+            {
+                if (values.Length < 3)
+                {
+                    continue;
+                }
+                string relativeDisplayName = values[1];
+                if (!int.TryParse(values[2], out int kind))
+                {
+                    continue;
+                }
+                string relationKindLabel = string.Empty;
+                if (values.Length > 3)
+                {
+                    relationKindLabel = values[3];
+                }
+                if (relationKindLabel.Length == 0)
+                {
+                    relationKindLabel = AndroidRelationToString(kind) ?? string.Empty;
+                }
+                fields.Add(new ContactRelationFieldViewModel(relationKindLabel, relativeDisplayName));
+            }
             FlushSection(Strings.section_title_relationships);
         }
 
@@ -462,6 +483,30 @@ partial class ContactViewModel
                 return values;
             }
             return Array.Empty<string[]>();
+        }
+
+        private static string? AndroidRelationToString(int kind)
+        {
+            // Android.Provider.RelationDataKind
+            return kind switch
+            {
+                // 0 => custom,
+                1 => Strings.relation_assistant,
+                2 => Strings.relation_brother,
+                3 => Strings.relation_child,
+                4 => Strings.relation_domestic_partner,
+                5 => Strings.relation_father,
+                6 => Strings.relation_friend,
+                7 => Strings.relation_manager,
+                8 => Strings.relation_mother,
+                9 => Strings.relation_parent,
+                10 => Strings.relation_partner,
+                11 => Strings.relation_referred_by,
+                12 => Strings.relation_relative,
+                13 => Strings.relation_sister,
+                14 => Strings.relation_spouse,
+                _ => null,
+            };
         }
 
         private void FlushSection(string title)
