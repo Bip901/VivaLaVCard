@@ -30,7 +30,7 @@ public partial class MainWindow : Window
 
     private static void OnDragOver(object? sender, DragEventArgs e)
     {
-        e.DragEffects = HasFiles(e) ? DragDropEffects.Copy : DragDropEffects.None;
+        e.DragEffects = e.DataTransfer.TryGetFiles()?.Length > 0 ? DragDropEffects.Copy : DragDropEffects.None;
         e.Handled = true;
     }
 
@@ -38,21 +38,14 @@ public partial class MainWindow : Window
     {
         e.Handled = true;
 
-        IStorageFile[] files = e.DataTransfer.TryGetFiles()?.OfType<IStorageFile>().ToArray() ?? [];
-
-        if (files.Length == 0)
+        IStorageItem[]? items = e.DataTransfer.TryGetFiles();
+        if (items is null || items.Length == 0)
         {
             e.DragEffects = DragDropEffects.None;
             return;
         }
-
         e.DragEffects = DragDropEffects.Copy;
-        _ = AddFilesAsync(files);
-    }
-
-    private static bool HasFiles(DragEventArgs e)
-    {
-        return e.DataTransfer.TryGetFiles()?.OfType<IStorageFile>().Any() == true;
+        _ = AddItemsAsync(items);
     }
 
     private void OnSearchBoxKeyDown(object? sender, KeyEventArgs e)
@@ -115,9 +108,9 @@ public partial class MainWindow : Window
         }
     }
 
-    private async Task AddFilesAsync(IEnumerable<IStorageFile> files)
+    private async Task AddItemsAsync(IEnumerable<IStorageItem> items)
     {
-        await ViewModel.AddFilesAsync(files.Select(file => file.TryGetLocalPath() ?? file.Path.ToString()));
+        await ViewModel.AddFilesAsync(items.Select(item => item.TryGetLocalPath() ?? item.Path.ToString()));
     }
 
     private void ContactsChip_Click(object? sender, RoutedEventArgs e)
@@ -158,6 +151,6 @@ public partial class MainWindow : Window
             }
         );
 
-        await AddFilesAsync(files);
+        await AddItemsAsync(files);
     }
 }

@@ -8,6 +8,7 @@ using FolkerKinzel.VCards;
 using FolkerKinzel.VCards.Models.Properties;
 using VivaLaVCard.Models;
 using VivaLaVCard.Resources;
+using VivaLaVCard.Util;
 
 namespace VivaLaVCard.ViewModels;
 
@@ -104,10 +105,10 @@ public sealed class MainWindowViewModel : ViewModelBase
 #endif
     }
 
-    public async Task AddFilesAsync(IEnumerable<string> filePaths)
+    public async Task AddFilesAsync(IEnumerable<string> paths)
     {
         HashSet<string> existingPaths = [.. files.Select(file => file.FilePath)];
-        foreach (string filePath in filePaths)
+        foreach (string filePath in paths.SelectMany(VCardFilePaths.Expand))
         {
             if (existingPaths.Contains(filePath))
             {
