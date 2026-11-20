@@ -173,4 +173,9 @@ public partial class MainWindow : Window
 
         await AddItemsAsync(folders);
     }
+
+    private async void SettingsButton_Click(object? sender, RoutedEventArgs e)
+    {
+        await new SettingsDialog().ShowAsync();
+    }
 }

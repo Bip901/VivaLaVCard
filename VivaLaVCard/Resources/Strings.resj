@@ -77,6 +77,13 @@
     "note": "Note",
     "website": "Website",
     "open_website_tooltip": "Open website",
-    "vcard_version": "vCard Version"
+    "vcard_version": "vCard Version",
+
+    // Settings Dialog
+    "settings_title": "Settings",
+    "theme": "Theme",
+    "theme_follow_system": "Follow system setting",
+    "theme_light": "Light",
+    "theme_dark": "Dark"
   }
 }

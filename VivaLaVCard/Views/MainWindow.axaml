@@ -70,6 +70,7 @@
                                 <Button
                                     AutomationProperties.Name="{x:Static res:Strings.settings_tooltip}"
                                     Classes="round"
+                                    Click="SettingsButton_Click"
                                     ToolTip.Tip="{x:Static res:Strings.settings_tooltip}">
                                     <PathIcon Data="{StaticResource IconSettings}" />
                                 </Button>

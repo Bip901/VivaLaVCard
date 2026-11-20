@@ -22,6 +22,7 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            Settings.Instance.Apply();
             MainWindow window = new();
             if (desktop.Args != null)
             {
