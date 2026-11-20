@@ -17,5 +17,19 @@
             <ComboBoxItem Content="{x:Static res:Strings.theme_light}" />
             <ComboBoxItem Content="{x:Static res:Strings.theme_dark}" />
         </ComboBox>
+        <TextBlock Text="{x:Static res:Strings.maps_search_provider}" />
+        <ComboBox
+            x:Name="MapsProviderComboBox"
+            HorizontalAlignment="Stretch">
+            <ComboBoxItem Content="{x:Static res:Strings.maps_search_provider_other}" />
+            <ComboBoxItem Content="{x:Static res:Strings.maps_search_provider_openstreetmap}" />
+            <ComboBoxItem Content="{x:Static res:Strings.maps_search_provider_google_maps}" />
+        </ComboBox>
+        <TextBlock Text="{x:Static res:Strings.maps_search_url}" />
+        <TextBox x:Name="MapsSearchUrlTextBox" />
+        <TextBlock
+            Classes="hint"
+            Text="{x:Static res:Strings.maps_search_url_hint}"
+            TextWrapping="Wrap" />
     </StackPanel>
 </dialogs:BaseDialog>

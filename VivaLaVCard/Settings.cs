@@ -3,6 +3,7 @@ using System.IO;
 using Avalonia;
 using Avalonia.Styling;
 using Configson;
+using VivaLaVCard.Util;
 
 namespace VivaLaVCard;
 
@@ -22,6 +23,10 @@ public class Settings
     }
 
     public ThemeEnum Theme { get; set; } = ThemeEnum.FollowSystem;
+
+    public MapsProvider MapsProvider { get; set; } = MapsProvider.OpenStreetMap;
+
+    public string? CustomMapsSearchUrl { get; set; }
 
     static Settings()
     {

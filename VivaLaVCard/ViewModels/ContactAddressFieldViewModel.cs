@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using VivaLaVCard.Resources;
+using VivaLaVCard.Util;
 
 namespace VivaLaVCard.ViewModels;
 
@@ -88,8 +89,8 @@ public sealed class ContactAddressFieldViewModel : ContactFieldViewModel
                 continue;
             }
         }
-        // TODO: Allow choosing https://www.google.com/maps/search/
-        Uri uri = new("https://www.openstreetmap.org/search?query=" + Uri.EscapeDataString(string.Join(", ", parts)));
+        string query = Uri.EscapeDataString(string.Join(", ", parts));
+        Uri uri = new(string.Format(MapsUtil.GetSearchUrl(), query));
         _ = launcher.LaunchUriAsync(uri);
     }
 }

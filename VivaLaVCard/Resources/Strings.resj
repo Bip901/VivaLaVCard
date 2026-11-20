@@ -84,6 +84,12 @@
     "theme": "Theme",
     "theme_follow_system": "Follow system setting",
     "theme_light": "Light",
-    "theme_dark": "Dark"
+    "theme_dark": "Dark",
+    "maps_search_provider": "Maps provider",
+    "maps_search_provider_openstreetmap": "OpenStreetMap",
+    "maps_search_provider_google_maps": "Google Maps",
+    "maps_search_provider_other": "Other",
+    "maps_search_url": "Search URL template",
+    "maps_search_url_hint": "Use {0} where the address should be inserted, e.g. https://example.com/search?q={0}"
   }
 }
