@@ -1,11 +1,15 @@
 using System;
 using System.IO;
+using System.Text.Json.Serialization;
 using Avalonia;
 using Avalonia.Styling;
 using Configson;
 using VivaLaVCard.Util;
 
 namespace VivaLaVCard;
+
+[JsonSerializable(typeof(Settings))]
+partial class SettingsJsonSerializerContext : JsonSerializerContext { }
 
 public class Settings
 {
@@ -31,6 +35,7 @@ public class Settings
     static Settings()
     {
         ConfigurationIO.SetBaseDirectory(AppDataDirectoryName, RelativePathType.RelativeToAppData);
+        ConfigurationIO.JsonSerializerOptions = new() { TypeInfoResolver = new SettingsJsonSerializerContext() };
     }
 
     private static Settings Load()
