@@ -96,6 +96,12 @@ public partial class MainWindow : Window
             e.Handled = true;
             return;
         }
+        if (e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift) && e.Key == Key.O)
+        {
+            _ = OpenFoldersAsync();
+            e.Handled = true;
+            return;
+        }
         if (e.KeyModifiers == KeyModifiers.None && (e.Key == Key.OemQuestion || e.Key == Key.Divide))
         {
             if (!SearchBox.IsFocused)
@@ -152,5 +158,19 @@ public partial class MainWindow : Window
         );
 
         await AddItemsAsync(files);
+    }
+
+    private async void OpenFoldersButton_Click(object? sender, RoutedEventArgs e)
+    {
+        await OpenFoldersAsync();
+    }
+
+    private async Task OpenFoldersAsync()
+    {
+        IReadOnlyList<IStorageFolder> folders = await StorageProvider.OpenFolderPickerAsync(
+            new FolderPickerOpenOptions { Title = Strings.open_folder_title, AllowMultiple = true }
+        );
+
+        await AddItemsAsync(folders);
     }
 }

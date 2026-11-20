@@ -48,14 +48,32 @@
                                     Click="FilesChip_Click"
                                     Content="{x:Static res:Strings.files_title}" />
                             </StackPanel>
-                            <Button
+                            <StackPanel
                                 Grid.Column="1"
-                                AutomationProperties.Name="{x:Static res:Strings.open_files_tooltip}"
-                                Classes="round"
-                                Click="OpenContactsButton_Click"
-                                ToolTip.Tip="{x:Static res:Strings.open_files_tooltip}">
-                                <PathIcon Data="{StaticResource IconFileOpen}" />
-                            </Button>
+                                Orientation="Horizontal"
+                                Spacing="2"
+                                VerticalAlignment="Center">
+                                <Button
+                                    AutomationProperties.Name="{x:Static res:Strings.open_files_tooltip}"
+                                    Classes="round"
+                                    Click="OpenContactsButton_Click"
+                                    ToolTip.Tip="{x:Static res:Strings.open_files_tooltip}">
+                                    <PathIcon Data="{StaticResource IconFileOpen}" />
+                                </Button>
+                                <Button
+                                    AutomationProperties.Name="{x:Static res:Strings.open_folder_tooltip}"
+                                    Classes="round"
+                                    Click="OpenFoldersButton_Click"
+                                    ToolTip.Tip="{x:Static res:Strings.open_folder_tooltip}">
+                                    <PathIcon Data="{StaticResource IconFolderOpen}" />
+                                </Button>
+                                <Button
+                                    AutomationProperties.Name="{x:Static res:Strings.settings_tooltip}"
+                                    Classes="round"
+                                    ToolTip.Tip="{x:Static res:Strings.settings_tooltip}">
+                                    <PathIcon Data="{StaticResource IconSettings}" />
+                                </Button>
+                            </StackPanel>
                         </Grid>
                         <TextBox
                             x:Name="SearchBox"
