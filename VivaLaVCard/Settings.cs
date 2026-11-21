@@ -32,6 +32,8 @@ public class Settings
 
     public string? CustomMapsSearchUrl { get; set; }
 
+    public string[]? StartupPaths { get; set; }
+
     static Settings()
     {
         ConfigurationIO.SetBaseDirectory(AppDataDirectoryName, RelativePathType.RelativeToAppData);

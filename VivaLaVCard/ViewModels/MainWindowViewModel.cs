@@ -105,6 +105,10 @@ public sealed class MainWindowViewModel : ViewModelBase
 #endif
     }
 
+    /// <summary>
+    /// Loads the VCards from the given files and adds them to the GUI.
+    /// If a path denotes a directory, it's searched non-recursively for vcf files.
+    /// </summary>
     public async Task AddFilesAsync(IEnumerable<string> paths)
     {
         HashSet<string> existingPaths = [.. files.Select(file => file.FilePath)];
@@ -126,7 +130,6 @@ public sealed class MainWindowViewModel : ViewModelBase
                     ButtonText = Strings.ok,
                 };
                 await dialog.ShowAsync();
-                await Task.Delay(100);
             }
         }
         contactViewModelIndex.Regenerate(files.SelectMany(file => file.Contacts));

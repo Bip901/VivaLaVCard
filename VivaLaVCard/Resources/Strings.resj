@@ -90,6 +90,10 @@
     "maps_search_provider_google_maps": "Google Maps",
     "maps_search_provider_other": "Other",
     "maps_search_url": "Search URL template",
-    "maps_search_url_hint": "Use {0} where the address should be inserted, e.g. https://example.com/search?q={0}"
+    "maps_search_url_hint": "Use {0} where the address should be inserted, e.g. https://example.com/search?q={0}",
+    "startup_paths": "Startup paths",
+    "add_startup_file_tooltip": "Add startup file",
+    "add_startup_folder_tooltip": "Add startup folder",
+    "remove_startup_path_tooltip": "Remove selected startup path"
   }
 }

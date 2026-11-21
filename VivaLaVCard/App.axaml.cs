@@ -24,11 +24,13 @@ public partial class App : Application
         {
             Settings.Instance.Apply();
             MainWindow window = new();
-            if (desktop.Args != null)
+            string[]? startupPaths =
+                (desktop.Args is not null && desktop.Args.Length > 0) ? desktop.Args : Settings.Instance.StartupPaths;
+            if (startupPaths is not null && startupPaths.Length > 0)
             {
                 window.DoWhenLoaded(() =>
                 {
-                    _ = window.ViewModel.AddFilesAsync(desktop.Args);
+                    _ = window.ViewModel.AddFilesAsync(startupPaths);
                 });
             }
             desktop.MainWindow = window;

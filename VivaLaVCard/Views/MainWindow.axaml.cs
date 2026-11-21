@@ -144,17 +144,8 @@ public partial class MainWindow : Window
 
     private async Task OpenFilesAsync()
     {
-        var files = await StorageProvider.OpenFilePickerAsync(
-            new FilePickerOpenOptions
-            {
-                Title = Strings.open_files_title,
-                AllowMultiple = true,
-                FileTypeFilter =
-                [
-                    new FilePickerFileType(Strings.vcard_files_filter) { Patterns = ["*.vcf"] },
-                    new FilePickerFileType(Strings.all_files_filter) { Patterns = ["*"] },
-                ],
-            }
+        IReadOnlyList<IStorageFile> files = await StorageProvider.OpenFilePickerAsync(
+            UIUtil.CreateVCardFilePickerOpenOptions()
         );
 
         await AddItemsAsync(files);

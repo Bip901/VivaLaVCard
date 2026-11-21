@@ -4,11 +4,27 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.Platform.Storage;
+using VivaLaVCard.Resources;
 
 namespace VivaLaVCard.Util;
 
 public static class UIUtil
 {
+    public static FilePickerOpenOptions CreateVCardFilePickerOpenOptions()
+    {
+        return new FilePickerOpenOptions
+        {
+            Title = Strings.open_files_title,
+            AllowMultiple = true,
+            FileTypeFilter =
+            [
+                new FilePickerFileType(Strings.vcard_files_filter) { Patterns = ["*.vcf"] },
+                new FilePickerFileType(Strings.all_files_filter) { Patterns = ["*"] },
+            ],
+        };
+    }
+
     /// <summary>
     /// Focuses the first child of this ItemsControl once this items control is loaded.
     /// </summary>

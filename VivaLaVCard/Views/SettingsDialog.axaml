@@ -3,13 +3,14 @@
                     xmlns:dialogs="using:AvaloniaDialogs.Views"
                     xmlns:res="using:VivaLaVCard.Resources"
                     x:Class="VivaLaVCard.Views.SettingsDialog">
-    <StackPanel
-        Margin="8"
-        MinWidth="320"
-        Orientation="Vertical"
-        Spacing="8">
-        <TextBlock Classes="h1" Text="{x:Static res:Strings.settings_title}" />
-        <TextBlock Text="{x:Static res:Strings.theme}" />
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel
+            Margin="8"
+            MinWidth="320"
+            Orientation="Vertical"
+            Spacing="8">
+        <TextBlock Classes="h1" Text="{x:Static res:Strings.settings_title}" Margin="0 0 0 8" />
+        <TextBlock Text="{x:Static res:Strings.theme}" Classes="h2" />
         <ComboBox
             x:Name="ThemeComboBox"
             HorizontalAlignment="Stretch">
@@ -17,7 +18,7 @@
             <ComboBoxItem Content="{x:Static res:Strings.theme_light}" />
             <ComboBoxItem Content="{x:Static res:Strings.theme_dark}" />
         </ComboBox>
-        <TextBlock Text="{x:Static res:Strings.maps_search_provider}" />
+        <TextBlock Text="{x:Static res:Strings.maps_search_provider}" Classes="h2" Margin="0 8 0 0" />
         <ComboBox
             x:Name="MapsProviderComboBox"
             HorizontalAlignment="Stretch">
@@ -25,11 +26,47 @@
             <ComboBoxItem Content="{x:Static res:Strings.maps_search_provider_openstreetmap}" />
             <ComboBoxItem Content="{x:Static res:Strings.maps_search_provider_google_maps}" />
         </ComboBox>
-        <TextBlock Text="{x:Static res:Strings.maps_search_url}" />
-        <TextBox x:Name="MapsSearchUrlTextBox" />
+        <TextBlock Text="{x:Static res:Strings.maps_search_url}" Classes="h3" Margin="16 0 0 0"/>
+        <TextBox x:Name="MapsSearchUrlTextBox" Margin="16 0 0 0" />
         <TextBlock
             Classes="hint"
+            Margin="16 0 0 0"
             Text="{x:Static res:Strings.maps_search_url_hint}"
             TextWrapping="Wrap" />
-    </StackPanel>
-</dialogs:BaseDialog>
+        <TextBlock Text="{x:Static res:Strings.startup_paths}" Classes="h2" Margin="0 8 0 0"/>
+        <ListBox
+            x:Name="StartupPathsListBox"
+            MaxHeight="120"
+            SelectionMode="Single">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" TextTrimming="CharacterEllipsis" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <StackPanel Orientation="Horizontal" Spacing="2">
+            <Button
+                AutomationProperties.Name="{x:Static res:Strings.add_startup_file_tooltip}"
+                Classes="round"
+                Click="AddStartupFileButton_Click"
+                ToolTip.Tip="{x:Static res:Strings.add_startup_file_tooltip}">
+                <PathIcon Data="{StaticResource IconFileOpen}" />
+            </Button>
+            <Button
+                AutomationProperties.Name="{x:Static res:Strings.add_startup_folder_tooltip}"
+                Classes="round"
+                Click="AddStartupFolderButton_Click"
+                ToolTip.Tip="{x:Static res:Strings.add_startup_folder_tooltip}">
+                <PathIcon Data="{StaticResource IconFolderOpen}" />
+            </Button>
+            <Button
+                AutomationProperties.Name="{x:Static res:Strings.remove_startup_path_tooltip}"
+                Classes="round"
+                Click="RemoveStartupPathButton_Click"
+                ToolTip.Tip="{x:Static res:Strings.remove_startup_path_tooltip}">
+                <PathIcon Data="{StaticResource IconTrash}" />
+            </Button>
+        </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</dialogs:BaseDialog>
