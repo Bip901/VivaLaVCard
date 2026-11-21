@@ -19,7 +19,7 @@
         MinHeight="320"
         DragDrop.AllowDrop="True"
         WindowStartupLocation="CenterScreen">
-    <dialogs:ReactiveDialogHost CloseOnClickAway="True">
+    <dialogs:ReactiveDialogHost CloseOnClickAway="True" IsMultipleDialogsEnabled="True">
         <Grid Background="{DynamicResource SystemRegionBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="300" Width="320" />
