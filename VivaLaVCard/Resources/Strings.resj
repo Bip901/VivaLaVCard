@@ -17,6 +17,7 @@
     "settings_tooltip": "Settings",
     "invalid_file_desc": "Failed loading vCard file {0}. Reason: {1}",
     "remove_file_tooltip": "Remove file from list",
+    "remove_all_files_tooltip": "Remove all files",
     "resize_sidebar_tooltip": "Resize sidebar",
     "vcard_files_filter": "vCard files (*.vcf)",
     "all_files_filter": "All files (*.*)",

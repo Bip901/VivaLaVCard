@@ -137,6 +137,11 @@ public partial class MainWindow : Window
         }
     }
 
+    private void RemoveAllFilesButton_Click(object? sender, RoutedEventArgs e)
+    {
+        ViewModel.RemoveAllFiles();
+    }
+
     private async void OpenContactsButton_Click(object? sender, RoutedEventArgs e)
     {
         await OpenFilesAsync();

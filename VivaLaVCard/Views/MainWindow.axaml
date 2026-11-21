@@ -22,7 +22,7 @@
     <dialogs:ReactiveDialogHost CloseOnClickAway="True" IsMultipleDialogsEnabled="True">
         <Grid Background="{DynamicResource SystemRegionBrush}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="300" Width="320" />
+                <ColumnDefinition MinWidth="340" Width="340" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition MinWidth="360" Width="*" />
             </Grid.ColumnDefinitions>
@@ -66,6 +66,14 @@
                                     Click="OpenFoldersButton_Click"
                                     ToolTip.Tip="{x:Static res:Strings.open_folder_tooltip}">
                                     <PathIcon Data="{StaticResource IconFolderOpen}" />
+                                </Button>
+                                <Button
+                                    AutomationProperties.Name="{x:Static res:Strings.remove_all_files_tooltip}"
+                                    Classes="round"
+                                    Click="RemoveAllFilesButton_Click"
+                                    IsVisible="{Binding HasFiles}"
+                                    ToolTip.Tip="{x:Static res:Strings.remove_all_files_tooltip}">
+                                    <PathIcon Data="{StaticResource IconClose}" />
                                 </Button>
                                 <Button
                                     AutomationProperties.Name="{x:Static res:Strings.settings_tooltip}"

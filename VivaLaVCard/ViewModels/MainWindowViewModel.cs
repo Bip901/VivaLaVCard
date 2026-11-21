@@ -59,6 +59,8 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     public bool IsFilesView => SelectedSidebarView == SidebarView.Files;
 
+    public bool HasFiles => files.Count > 0;
+
     public string ContactCountLabel
     {
         get
@@ -132,8 +134,7 @@ public sealed class MainWindowViewModel : ViewModelBase
                 await dialog.ShowAsync();
             }
         }
-        contactViewModelIndex.Regenerate(files.SelectMany(file => file.Contacts));
-        Refilter();
+        OnFilesChanged();
         if (searchQuery.Length == 0 && SelectedContact == null && FilteredContacts.Count == 1)
         {
             // Just loaded a file with only 1 contact, select it.
@@ -144,7 +145,14 @@ public sealed class MainWindowViewModel : ViewModelBase
     public void RemoveFile(VCardFileViewModel file)
     {
         files.Remove(file);
-        Refilter();
+        OnFilesChanged();
+        SelectedContact = null;
+    }
+
+    public void RemoveAllFiles()
+    {
+        files.Clear();
+        OnFilesChanged();
         SelectedContact = null;
     }
 
@@ -163,5 +171,12 @@ public sealed class MainWindowViewModel : ViewModelBase
         OnPropertyChanged(nameof(FilteredFiles));
         OnPropertyChanged(nameof(FilteredContacts));
         OnPropertyChanged(nameof(ContactCountLabel));
+    }
+
+    private void OnFilesChanged()
+    {
+        OnPropertyChanged(nameof(HasFiles));
+        contactViewModelIndex.Regenerate(files.SelectMany(file => file.Contacts));
+        Refilter();
     }
 }
